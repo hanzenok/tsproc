@@ -1,11 +1,16 @@
 {
-  "name": "tsproc",
-  "version": "0.0.1",
-  "description": "A time series processor",
-  "main": "tsproc.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Ganza Mykhailo",
-  "license": "ISC"
+	"name": "tsproc",
+	"version": "0.0.1",
+	"description": "A time series processor",
+	"main": "index.js",
+	"private": "true",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "Ganza Mykhailo",
+	"license": "MIT",
+	"dependencies": {
+		"moment": "^2.12.0",
+		"underscore": "^1.8.3"
+	}
 }
