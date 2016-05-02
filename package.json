@@ -1,0 +1,11 @@
+{
+  "name": "tsproc",
+  "version": "0.0.1",
+  "description": "A time series processor",
+  "main": "tsproc.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ganza Mykhailo",
+  "license": "ISC"
+}
