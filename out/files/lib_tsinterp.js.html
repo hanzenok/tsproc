@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>lib/tsinterp.js - tsproc</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.8.0pr2/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <script src="http://yui.yahooapis.com/combo?3.8.0pr2/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            <h1><a href="../index.html"><img src="../assets/css/logo.png" width="117" height="52">tsproc: lib/tsinterp.js</a></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 0.0.1</em>
+        </div>
+    </div>
+    <div class="yui3-g">
+
+        <div id="sidebar" class="yui3-u">
+            <div id="modules" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Modules</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../modules/tsproc.html">tsproc</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="classes" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Classes</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../classes/tsinterp.html">tsinterp</a></li>
+                            <li><a href="../classes/tsproc.html">tsproc</a></li>
+                            <li><a href="../classes/tsreductions.html">tsreductions</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="elements" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Elements</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                    </ul>
+                </div>
+            </div>
+            
+            
+            
+            
+            
+            <div id="fileTree" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Files</h2>
+                </div>
+                <div class="bd">
+                    <ul><li>lib/<ul><li><a href="../files/lib_tsinterp.js.html">tsinterp.js</a></li><li><a href="../files/lib_tsproc.js.html">tsproc.js</a></li><li><a href="../files/lib_tsreductions.js.html">tsreductions.js</a></li></ul></li></ul>
+                </div>
+            </div>
+            
+        </div>
+
+        <div id="main" class="yui3-u">
+            <div class="content"><h4>lib/tsinterp.js</h4>
+
+<pre class="code prettyprint linenums">
+var moment = require(&#x27;moment&#x27;);
+var smooth = require(&#x27;./smooth&#x27;);
+
+/**
+ * @module tsproc
+ */
+
+/**
+ * A class that is used to interpolate the missing
+ * documents in the timeseries. Two public methods:
+ * a constructor &#x27;tsinterp&#x27; that learns the timeseries values
+ * and a method &#x27;smooth&#x27; that takes as parameter a date
+ * (string with ISO format) and returns a document with
+ * interpolated values.
+ *
+ * Based on the &lt;a href=&#x27;https://github.com/osuushi/Smooth.js/&#x27;&gt;Smooth.js&lt;/a&gt;
+ * module.
+ *
+ * @class tsinterp
+ * @constructor
+ */
+
+/**
+ * @property INTERP_METHODS
+ * @type array
+ * Description of interpolation methods.
+ * Methods comparation could be found &lt;a href=&quot;http://osuushi.github.io/plotdemo016.html&quot;&gt;here&lt;/a&gt;.
+ */
+var INTERP_METHODS = [&#x27;linear&#x27;, &#x27;cubic&#x27;, &#x27;lanczos&#x27;, &#x27;nearest&#x27;];
+
+ /**
+ * A public constructor that initiates the class and then
+ * learns the datapoints.
+ *
+ * @method tsinterp
+ * @for tsinterp
+ * @param {array} timeseries A timeseries to learn. An array of JSONs
+ * @param {json} description A description of fields and timestamps (with their format) of the each document of timeseries
+ * @param {function} callback An error callback
+ * @example
+ *     var tsinterp = require(&#x27;./tsinterp&#x27;);
+ *
+ *     var ts = [{ year: &#x27;1919-01-01T00:00:00.000Z&#x27;, flows_funder: 1 }, { year: &#x27;1921-01-01T00:00:00.000Z&#x27;, flows_funder: 3 }];
+ *     var config = {fields: [{name: &#x27;flows_funder&#x27;}], type: 0, timestamp_field: &#x27;year&#x27;};
+ *
+ *     var smoother = new tsinterp(ts, config, null);
+ */
+function tsinterp(timeseries, description, callback){
+
+	//checks
+	if (timeseries == undefined || description == undefined){
+
+		if (callback)
+			callback(new Error(&#x27;timeseries and it\&#x27;s description should be defined&#x27;));
+
+		return;
+	}
+
+	if (timeseries.length &lt; 2){
+
+		if (callback)
+			callback(new Error(&#x27;timeseries should have multiple documents&#x27;));
+
+		return;
+	}
+
+	if (description.timestamp_field == undefined || description.fields == undefined){
+		callback(new Error(&#x27;Description is invalid&#x27;));
+
+		return;
+	}
+
+	for (var document in timeseries){
+
+		if (!moment.utc(document[description.timestamp_field], null, true).isValid()){
+
+			if (callback)
+				callback(new Error(&#x27;Timestamps are not valid&#x27;));
+
+			return;
+		}
+	}
+
+	//check type
+	if (description.type == undefined || typeof description.type != &#x27;number&#x27; || description.type &lt; 0 || description.type &gt; 3)
+		description.type = 0;
+
+	//private members
+	this._timeseries = timeseries;
+	this._nb_ts = timeseries.length;
+	this._timestamp_field = description.timestamp_field;
+	this._fields = description.fields;
+	this._clip_type = description.clip_type;
+	this._interp_type = INTERP_METHODS[description.type];
+
+	//extract an array of fields and dates
+	//from timeseries
+	this._values_array = extractValues.call(this);
+	this._dates_array = extractDates.call(this);
+
+	//learn the datapoints
+	this._learned = false; //wheather the datapoints were learned
+	learn.call(this, callback);
+
+	if (callback)
+		callback(null);
+}
+
+ /**
+ * A main public method that takes in the date
+ * and determines based on the previously learnt values
+ * the interpolated document with given date.
+ *
+ * @method smooth
+ * @for tsinterp
+ * @param {string} date A date to interpolate
+ * @param {function} callback A callback function
+ * @example
+ *     var tsinterp = require(&#x27;./tsinterp&#x27;);
+ *
+ *     var ts = [{ year: &#x27;1919-01-01T00:00:00.000Z&#x27;, flows_funder: 1 }, { year: &#x27;1921-01-01T00:00:00.000Z&#x27;, flows_funder: 3 }];
+ *     var config = {fields: [{name: &#x27;flows_funder&#x27;}], type: 0, timestamp_field: &#x27;year&#x27;}; // 0 - linear interpolation
+ *     var smoother = new tsinterp(ts, config, null);
+ *
+ *     //inside the range
+ *     smoother.smooth(&#x27;1920-01-01T00:00:00.000Z&#x27;, function(err, doc){
+ *
+ *     	if (doc) console.log(doc); //{ year: &#x27;1920-01-01T00:00:00.000Z&#x27;, flows_funder: 1.998632 }
+ *     });
+ *
+ *     //out of the range
+ *     smoother.smooth(&#x27;1923-01-01T00:00:00.000Z&#x27;, function(err, doc){
+ *
+ *     	if (doc) console.log(doc); //{ year: &#x27;1923-01-01T00:00:00.000Z&#x27;, flows_funder: 0 }
+ *     });
+ */
+tsinterp.prototype.smooth = function(date, callback){
+
+	//checks
+	if (!date){
+
+		if (callback)
+			callback(new Error(&#x27;Date is unset&#x27;), null);
+
+		return;
+	}
+
+	if (!moment.utc(date, null, true).isValid()){
+
+		if (callback)
+			callback(new Error(&#x27;Date is not valid&#x27;), null);
+
+		return;
+	}
+
+	if (this._learned == false){
+
+		if (callback)
+			callback(new Error(&#x27;Datapoints are not learned yet&#x27;), null);
+
+		return;
+	}
+
+	//date to moment.js date
+	var moment_date = moment.utc(date, null, true);
+
+	//check the exterieur dates
+	var min_date = this._dates_array[0];
+	if (min_date.diff(moment_date) &gt; 0){
+
+		if (callback)
+			callback(null, createDoc.call(this, date, this._smooth(-1)));
+
+		return;
+	}
+	var max_date = this._dates_array[this._nb_ts - 1];
+	if (max_date.diff(moment_date) &lt; 0){
+
+		if (callback)
+			callback(null, createDoc.call(this, date, this._smooth(this._nb_ts)));
+
+		return;
+	}
+
+	//determine where to insert the date
+	var i=0,diff;
+	do{
+		diff = this._dates_array[i].diff(moment_date);
+		i++;
+	}while (diff &lt; 0);
+
+
+	//date is in the timeseries
+	if (diff == 0){
+
+		if (callback)
+			callback(null, createDoc.call(this, date, this._smooth(i-1)));
+
+		return;
+	}
+
+	//calculate the index to interpolate
+	var delta = this._dates_array[i-1].diff(this._dates_array[i-2]);
+	var index = i - 2 + (delta - diff)/delta;
+
+	if (callback)
+		callback(null, createDoc.call(this, date, this._smooth(index)));
+}
+
+ /**
+ * A private method used to generate a json document.
+ *
+ * @method createDoc
+ * @for tsinterp
+ * @param {string} time An ISO string representing the date
+ * @param {array} values An array of values of document fields
+ * @return {json} Generated document
+ */
+function createDoc(time, values){
+
+	var doc = {};
+
+	//timestamp field
+	doc[this._timestamp_field] = time;
+
+	//other fields
+	this._fields.forEach(function(field, index, array){
+
+		doc[field.name] = values[index];
+	});
+
+	return doc;
+}
+
+ /**
+ * A private method used to exract an array of dates (moment.js dates) of all
+ * the documents.&lt;/br&gt;
+ * &lt;i&gt;[{date: 1911, a: 2, b: 4},{date: 1912, a: 3, b: 1}] ==&gt; [1911, 1912]].&lt;/i&gt;
+ *
+ * @method extractDates
+ * @for tsinterp
+ * @return {array} An array of moment.js dates
+ */
+function extractDates(){
+
+	dates_array = new Array(this._nb_ts);
+
+	//extracting
+	for (var i=0; i&lt;this._nb_ts; i++){
+
+		dates_array[i] = moment.utc(this._timeseries[i][this._timestamp_field], null, true);
+	}
+
+	return dates_array;
+}
+
+ /**
+ * A private method used to exract an array of values of all
+ * the documents.&lt;/br&gt;
+ * &lt;i&gt;[{date: 1911, a: 2, b: 4},{date: 1912, a: 3, b: 1}] ==&gt; [[2, 4], [3, 1]].&lt;/i&gt;
+ *
+ * @method extractValues
+ * @for tsinterp
+ * @return {array} An array of values
+ */
+function extractValues(){
+
+	values_array = new Array(this._nb_ts);
+
+	//number of fields
+	var nb_fields = this._fields.length;
+
+	//extracting
+	var tmp;
+	for (var i=0; i&lt;this._nb_ts; i++){
+
+		tmp = [];
+		for (var j=0; j&lt;nb_fields; j++){
+
+			tmp.push(this._timeseries[i][this._fields[j].name]);
+		}
+
+		values_array[i] = tmp;
+	}
+
+	return values_array;
+}
+
+ /**
+ * A private method that learns the values
+ * of each document of the timeseries.
+ *
+ * @method learn
+ * @param {function} callback An error callback
+ * @for tsinterp
+ */
+function learn(callback){
+
+	this._learned = true;
+
+	try{
+		this._smooth = new smooth.Smooth(this._values_array, {method: this._interp_type, clip: &#x27;zero&#x27;, lanczosFilterSize: 4});
+	}
+	catch(err){
+
+		this._learned = false;
+
+		if (callback)
+			callback(err);
+	}
+}
+
+module.exports = tsinterp;
+
+</pre>
+
+</div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/js/tabs.js"></script>
+</body>
+</html>

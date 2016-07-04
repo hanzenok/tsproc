@@ -1,3 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>lib/tsproc.js - tsproc</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.8.0pr2/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <script src="http://yui.yahooapis.com/combo?3.8.0pr2/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            <h1><a href="../index.html"><img src="../assets/css/logo.png" width="117" height="52">tsproc: lib/tsproc.js</a></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 0.0.1</em>
+        </div>
+    </div>
+    <div class="yui3-g">
+
+        <div id="sidebar" class="yui3-u">
+            <div id="modules" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Modules</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../modules/tsproc.html">tsproc</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="classes" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Classes</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../classes/tsinterp.html">tsinterp</a></li>
+                            <li><a href="../classes/tsproc.html">tsproc</a></li>
+                            <li><a href="../classes/tsreductions.html">tsreductions</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="elements" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Elements</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                    </ul>
+                </div>
+            </div>
+            
+            
+            
+            
+            
+            <div id="fileTree" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Files</h2>
+                </div>
+                <div class="bd">
+                    <ul><li>lib/<ul><li><a href="../files/lib_tsinterp.js.html">tsinterp.js</a></li><li><a href="../files/lib_tsproc.js.html">tsproc.js</a></li><li><a href="../files/lib_tsreductions.js.html">tsreductions.js</a></li></ul></li></ul>
+                </div>
+            </div>
+            
+        </div>
+
+        <div id="main" class="yui3-u">
+            <div class="content"><h4>lib/tsproc.js</h4>
+
+<pre class="code prettyprint linenums">
 /**
  * @module tsproc
  */
@@ -11,16 +89,16 @@
  * @constructor
  */
 
-var moment = require('moment');
-var underscore = require('underscore');
-var tsinterp = require('./tsinterp');
-var tsreductions = require('./tsreductions');
+var moment = require(&#x27;moment&#x27;);
+var underscore = require(&#x27;underscore&#x27;);
+var tsinterp = require(&#x27;./tsinterp&#x27;);
+var tsreductions = require(&#x27;./tsreductions&#x27;);
 
 //global propreties
-var ISO_FORMAT = 'YYYY-MM-DDTHH:mm:ss.SSSSZ'; //standart ISO format
-var TIMESTAMP_FIELD = 'time'; //default timestamp field name
-var InterpEnum = {'linear': 0, 'cubic': 1, 'lanczos': 2, 'nearest': 3};
-var ReduceEnum = {'skip': 0, 'sum': 1, 'avg': 2, 'max': 3, 'min': 4};
+var ISO_FORMAT = &#x27;YYYY-MM-DDTHH:mm:ss.SSSSZ&#x27;; //standart ISO format
+var TIMESTAMP_FIELD = &#x27;time&#x27;; //default timestamp field name
+var InterpEnum = {&#x27;linear&#x27;: 0, &#x27;cubic&#x27;: 1, &#x27;lanczos&#x27;: 2, &#x27;nearest&#x27;: 3};
+var ReduceEnum = {&#x27;skip&#x27;: 0, &#x27;sum&#x27;: 1, &#x27;avg&#x27;: 2, &#x27;max&#x27;: 3, &#x27;min&#x27;: 4};
 var ReduceFunc = tsreductions;
 
 /**
@@ -31,49 +109,49 @@ var ReduceFunc = tsreductions;
  * @param {json} config A description of each timeseries
  * @param {function} err_callback Error callback
  * @example
- *     var tsproc = require('tsproc');
+ *     var tsproc = require(&#x27;tsproc&#x27;);
  *
  *     var config = {
- *     		"transform":{"type":"interp","interp_type":"linear"},
+ *     		&quot;transform&quot;:{&quot;type&quot;:&quot;interp&quot;,&quot;interp_type&quot;:&quot;linear&quot;},
  *
- *     		"reduction":{"type":"skip","size":1,"target_field":""},
+ *     		&quot;reduction&quot;:{&quot;type&quot;:&quot;skip&quot;,&quot;size&quot;:1,&quot;target_field&quot;:&quot;&quot;},
  *
- *     		"date_borders":{"from":{"date":""},"to":{"date":""}},
+ *     		&quot;date_borders&quot;:{&quot;from&quot;:{&quot;date&quot;:&quot;&quot;},&quot;to&quot;:{&quot;date&quot;:&quot;&quot;}},
  *
- *     		"correlation":{"count_negative":false,"max_coef":true},
+ *     		&quot;correlation&quot;:{&quot;count_negative&quot;:false,&quot;max_coef&quot;:true},
  *
- *     		"timeseries":
+ *     		&quot;timeseries&quot;:
  * 	    		[
  * 					{
- * 					"fields":
+ * 					&quot;fields&quot;:
  * 						[
- * 							{"name":"a"}
+ * 							{&quot;name&quot;:&quot;a&quot;}
  * 						],
  *
- * 					"timestamp":{"name":"year","format":"YYYY"}
+ * 					&quot;timestamp&quot;:{&quot;name&quot;:&quot;year&quot;,&quot;format&quot;:&quot;YYYY&quot;}
  * 					},
  *
  * 					{
- * 					"fields":
+ * 					&quot;fields&quot;:
  * 						[
- * 							{"name":"b"}
+ * 							{&quot;name&quot;:&quot;b&quot;}
  * 						],	
  *
- * 					"timestamp":{"name":"year","format":"YYYY"}
+ * 					&quot;timestamp&quot;:{&quot;name&quot;:&quot;year&quot;,&quot;format&quot;:&quot;YYYY&quot;}
  * 					}
  * 				]
  * 		};
  * 
  *     var ts = [
- *     		[{a: 18.11, year:'2011'}, {a: 21.07, year:'2012'}],
- *    		    [{b: 26.42, year:'2012'}, {b: 21.07, year:'2013'}]
+ *     		[{a: 18.11, year:&#x27;2011&#x27;}, {a: 21.07, year:&#x27;2012&#x27;}],
+ *    		    [{b: 26.42, year:&#x27;2012&#x27;}, {b: 21.07, year:&#x27;2013&#x27;}]
  *          ]
  *     
  *     var tsp = new tsproc(ts, config, null);
  */
 function tsproc(timeseries, config, err_callback){
 
-	if (timeseries && config){
+	if (timeseries &amp;&amp; config){
 
 		//save config
 		if (config){
@@ -82,27 +160,27 @@ function tsproc(timeseries, config, err_callback){
 			this._config = config.timeseries;
 
 			//transformation
-			this._transform_type = (config.transform && config.transform.type) ? config.transform.type : 'interp';
-			if (this._transform_type === 'interp')
-				this._interp_type = (config.transform.interp_type) ? config.transform.interp_type : 'linear';
+			this._transform_type = (config.transform &amp;&amp; config.transform.type) ? config.transform.type : &#x27;interp&#x27;;
+			if (this._transform_type === &#x27;interp&#x27;)
+				this._interp_type = (config.transform.interp_type) ? config.transform.interp_type : &#x27;linear&#x27;;
 			else
 				this._interp_type = null;
 
 			//reduction
-			this._reduction_type = (config.reduction && config.reduction.type) ? config.reduction.type : 'skip';
-			this._reduction_size = (config.reduction && config.reduction.size) ? config.reduction.size : 1;
-			this._reduction_target_field = (config.reduction && config.reduction.target_field) ? config.reduction.target_field : null;
+			this._reduction_type = (config.reduction &amp;&amp; config.reduction.type) ? config.reduction.type : &#x27;skip&#x27;;
+			this._reduction_size = (config.reduction &amp;&amp; config.reduction.size) ? config.reduction.size : 1;
+			this._reduction_target_field = (config.reduction &amp;&amp; config.reduction.target_field) ? config.reduction.target_field : null;
 
 			//date borders
-			this._from = (config.date_borders && config.date_borders.from && config.date_borders.from.date) ? config.date_borders.from.date : null;
-			this._to = (config.date_borders && config.date_borders.to && config.date_borders.to.date) ? config.date_borders.to.date : null;
+			this._from = (config.date_borders &amp;&amp; config.date_borders.from &amp;&amp; config.date_borders.from.date) ? config.date_borders.from.date : null;
+			this._to = (config.date_borders &amp;&amp; config.date_borders.to &amp;&amp; config.date_borders.to.date) ? config.date_borders.to.date : null;
 
 			//correlation detection
 			if (config.correlation){
 
 				this._correlation_activated = true;
-				this._count_negative = (typeof config.correlation.count_negative !== 'undefined') ? config.correlation.count_negative : false;
-				this._max_coef = (typeof config.correlation.max_coef !== 'undefined') ? config.correlation.max_coef : true;
+				this._count_negative = (typeof config.correlation.count_negative !== &#x27;undefined&#x27;) ? config.correlation.count_negative : false;
+				this._max_coef = (typeof config.correlation.max_coef !== &#x27;undefined&#x27;) ? config.correlation.max_coef : true;
 			}
 			else{
 
@@ -122,36 +200,36 @@ function tsproc(timeseries, config, err_callback){
 	else{
 
 		if (err_callback)
-			err_callback(new Error('Timeseries or config are not set'));
+			err_callback(new Error(&#x27;Timeseries or config are not set&#x27;));
 
 		return;
 	}
 }
 
 /**
- * A main public method that processes the array of timeseries. It returns (via callback) a one timeseries with timestamp field 'time' in the
+ * A main public method that processes the array of timeseries. It returns (via callback) a one timeseries with timestamp field &#x27;time&#x27; in the
  * ISO format. This timeseries correspond to the fusion of an array of timeseries, and if they are not homogeneous the interpolation would be applyed.
  *
- * <br/>The processing takes the next steps:
+ * &lt;br/&gt;The processing takes the next steps:
  * - if the borders(min and max dates) are specified in the config file, the timeseries would be cut
  * - all the dates would be transformed to the ISO string
  * - if there are multiple timeseries, and they are not homogeneous, all the timeseries would be interpolated or intersected
  * (ie leaving only the documents with dates that are present in all the timeseries)
  * - if the are multiple timeseries, they would be fused into one timeseries document by document
- * - the output timeseries the timestamp field would be called 'time'
+ * - the output timeseries the timestamp field would be called &#x27;time&#x27;
  * - finally, if the skip value is defined, the timeseries would undersampled to decrease the size of the timeseries 
  * 
  *
  * @method process
  * @param {function} callback A callback function
  * @example
- *     var tsproc = require('tsproc');
+ *     var tsproc = require(&#x27;tsproc&#x27;);
  *
  *     var config = {}; //config example is in the tsproc method
  * 
  *     var ts = [
- *     		[{a: 18.11, year:'2011'}, {a: 21.07, year:'2012'}],
- *    		    [{b: 26.42, year:'2012'}, {b: 24.11, year:'2013'}]
+ *     		[{a: 18.11, year:&#x27;2011&#x27;}, {a: 21.07, year:&#x27;2012&#x27;}],
+ *    		    [{b: 26.42, year:&#x27;2012&#x27;}, {b: 24.11, year:&#x27;2013&#x27;}]
  *          ];
  *     
  *     var tsp = new tsproc(ts, config, null);
@@ -161,9 +239,9 @@ function tsproc(timeseries, config, err_callback){
  *	   		if (timeseries) console.log(timeseries);
  *     		//the result is:
  *     		//[
- *     		//	{time:'2011-01-01T00:00:00.000Z', a: 18.11, b: 0},
- *     		//	{time:'2012-01-01T00:00:00.000Z', a: 21.07, b: 26.42},
- *     		//	{time:'2013-01-01T00:00:00.000Z', a: 0, b: 24.11} 
+ *     		//	{time:&#x27;2011-01-01T00:00:00.000Z&#x27;, a: 18.11, b: 0},
+ *     		//	{time:&#x27;2012-01-01T00:00:00.000Z&#x27;, a: 21.07, b: 26.42},
+ *     		//	{time:&#x27;2013-01-01T00:00:00.000Z&#x27;, a: 0, b: 24.11} 
  *     		//]
  *     });
  */
@@ -188,18 +266,18 @@ tsproc.prototype.process = function(callback){
 		if (!is_homog){
 
 			//interpolation
-			if (this._transform_type === 'interp'){
+			if (this._transform_type === &#x27;interp&#x27;){
 				this.interpolate(InterpEnum[this._interp_type], err_callback);
 			}
 
 			//intersection
-			if (this._transform_type === 'inters'){
+			if (this._transform_type === &#x27;inters&#x27;){
 				this.intersect(err_callback);
 			}
 		}
 
 		//merge all TS if needed
-		//if there is only one TS, rename it's timestamp
+		//if there is only one TS, rename it&#x27;s timestamp
 		if (this.getNbTS() === 1){
 
 			this.renameField(0, this.getTimestampField(0), TIMESTAMP_FIELD, err_callback);
@@ -218,7 +296,7 @@ tsproc.prototype.process = function(callback){
 	else{
 
 		if (callback)
-			callback(new Error('Dates are not valid'));
+			callback(new Error(&#x27;Dates are not valid&#x27;));
 	}
 }
 
@@ -380,13 +458,13 @@ tsproc.prototype.getDocByTimestamp = function(ts_index, timestamp, callback){
 	if (!moment_date.isValid()){
 
 		if (callback)
-			callback(new Error('Invalid date'), null);
+			callback(new Error(&#x27;Invalid date&#x27;), null);
 
 		return;
 	}
 
 	var diff;
-	for (var i=0; i<ts_size; i++){
+	for (var i=0; i&lt;ts_size; i++){
 
 		diff = this.getTimestamp(ts_index, i).diff(moment_date);
 
@@ -405,7 +483,7 @@ tsproc.prototype.getDocByTimestamp = function(ts_index, timestamp, callback){
 
 
 /**
- * Public method that returns an array of fields present in the specified timeseries (ie in each of it's document).
+ * Public method that returns an array of fields present in the specified timeseries (ie in each of it&#x27;s document).
  *
  * @method getFields
  * @param {int} ts_index The index of timeseries
@@ -417,7 +495,7 @@ tsproc.prototype.getFields = function(ts_index){
 	var i,nb_fields = fields.length;
 	var fields_out = [];
 
-	for (i=0; i<nb_fields; i++){
+	for (i=0; i&lt;nb_fields; i++){
 		fields_out.push(fields[i].name);
 	}
 
@@ -444,7 +522,7 @@ tsproc.prototype.getAvgPerDay = function(){
 			var max_date = getMaxDate.call(this);
 
 			//number of days between the two borders
-			var nb_days = Math.ceil(max_date.diff(min_date, 'days', true));
+			var nb_days = Math.ceil(max_date.diff(min_date, &#x27;days&#x27;, true));
 
 			//timeseries size (number of instances)
 			var ts_size = this.getTSSize();
@@ -481,22 +559,22 @@ tsproc.prototype.getBorders = function(){
  * @return {boolean} Wheather a bunch of timeseries are homogeneous
  *
  * @example
- *     var tsproc = require('tsproc');
+ *     var tsproc = require(&#x27;tsproc&#x27;);
  *
  *     var config = {}; //config example is in the tsproc method
  * 
  *     //homogeneous timeseries
  *     var ts = [
- *     		[{a: 21.07, year:'2012'}, {a: 23.23, year:'2013'}, {a: 0.24, year:'2014'}],
- *    		    [{b: 21.42, year:'2012'}, {b: 23.11, year:'2013'}, {b: 0.11, year:'2014'}]
+ *     		[{a: 21.07, year:&#x27;2012&#x27;}, {a: 23.23, year:&#x27;2013&#x27;}, {a: 0.24, year:&#x27;2014&#x27;}],
+ *    		    [{b: 21.42, year:&#x27;2012&#x27;}, {b: 23.11, year:&#x27;2013&#x27;}, {b: 0.11, year:&#x27;2014&#x27;}]
  *          ];
  *     var tsp = new tsproc(ts, config, null);
  *     console.log(tsp.isHomogeneous()); //true
  *
  *     //non homogeneous timeseries
  *     var ts = [
- *     		[{a: 21.07, year:'2012'}, {a: 0.24, year:'2014'}],
- *    		    [{b: 21.42, year:'2012'}, {b: 23.11, year:'2013'}, {b: 0.11, year:'2014'}]
+ *     		[{a: 21.07, year:&#x27;2012&#x27;}, {a: 0.24, year:&#x27;2014&#x27;}],
+ *    		    [{b: 21.42, year:&#x27;2012&#x27;}, {b: 23.11, year:&#x27;2013&#x27;}, {b: 0.11, year:&#x27;2014&#x27;}]
  *          ];
  *     var tsp = new tsproc(ts, config, null);
  *     console.log(tsp.isHomogeneous()); //false
@@ -508,7 +586,7 @@ tsproc.prototype.isHomogeneous = function(){
 
 	//array of TS sizes
 	var sizes = new Array(nb_ts);
-	for (i=0; i<nb_ts; i++){
+	for (i=0; i&lt;nb_ts; i++){
 
 		sizes[i] = this.getTSSize(i);
 	}
@@ -526,16 +604,16 @@ tsproc.prototype.isHomogeneous = function(){
 		//check wheather the 3 random dates
 		//from all the timeseries are equal
 		var dates = [];
-		for (i=0; i<nb_ts; i++){
+		for (i=0; i&lt;nb_ts; i++){
 
 			dates.push(this.getTimestamp(i, i1).toISOString());
 			dates.push(this.getTimestamp(i, i2).toISOString());
 			dates.push(this.getTimestamp(i, i3).toISOString());
 		}
 
-		//if there are from 1 to 3 uniq dates ==> homogeneous
+		//if there are from 1 to 3 uniq dates ==&gt; homogeneous
 		var nb_uniques = underscore.uniq(dates).length;
-		if (nb_uniques > 0 && nb_uniques < 4){
+		if (nb_uniques &gt; 0 &amp;&amp; nb_uniques &lt; 4){
 			return true;
 		}
 	}
@@ -556,7 +634,7 @@ tsproc.prototype.isValid = function(){
 	var date;
 
 	//checks only the date of first doc of each timeseries
-	for (var i=0; i<n; i++){
+	for (var i=0; i&lt;n; i++){
 
 		date = this.getTimestamp(i, 0);
 
@@ -579,29 +657,29 @@ tsproc.prototype.isValid = function(){
  * @param {function} callback A callback function
  *
  * @example
- *     var tsproc = require('tsproc');
+ *     var tsproc = require(&#x27;tsproc&#x27;);
  *
  *     var config = {}; //config example is in the tsproc method
  * 
  *     var ts = [
- *     		[{a: 18.11, year:'2011'}, {a: 21.07, year:'2012'}],
- *    		    [{b: 26.42, year:'2012'}, {b: 24.11, year:'2013'}]
+ *     		[{a: 18.11, year:&#x27;2011&#x27;}, {a: 21.07, year:&#x27;2012&#x27;}],
+ *    		    [{b: 26.42, year:&#x27;2012&#x27;}, {b: 24.11, year:&#x27;2013&#x27;}]
  *          ];
  *     
  *     var tsp = new tsproc(ts, config, null);
  *
- *     tsp.renameField(0, 'a', 'new_a', function(err, timeseries){
+ *     tsp.renameField(0, &#x27;a&#x27;, &#x27;new_a&#x27;, function(err, timeseries){
  *	
  *	   		if (timeseries) console.log(timeseries);
  *     		//the result is:
  *     		//[
  *     		//	[
- *    			//		{new_a: 18.11, year: '2011'},
- *    			//		{new_a: 21.07, year: '2012'}
+ *    			//		{new_a: 18.11, year: &#x27;2011&#x27;},
+ *    			//		{new_a: 21.07, year: &#x27;2012&#x27;}
  *     		//  ],
  *     		//	[
- *    			//		{b: 26.42, year: '2012'},
- *    			//		{b: 24.11, year: '2013'}
+ *    			//		{b: 26.42, year: &#x27;2012&#x27;},
+ *    			//		{b: 24.11, year: &#x27;2013&#x27;}
  *     		//  ]
  *     		//]
  *     });
@@ -611,7 +689,7 @@ tsproc.prototype.renameField = function(ts_index, field_name, new_name, callback
 	var ts_size = this.getTSSize(ts_index);
 	var doc, tmp;
 
-	for (var i=0; i<ts_size; i++){
+	for (var i=0; i&lt;ts_size; i++){
 
 		//save value
 		doc = this.getDoc(ts_index, i);
@@ -649,14 +727,14 @@ tsproc.prototype.isISO = function(ts_index){
 	if(ts_index !== undefined){
 
 		format = this.getTimestampFormat(ts_index);
-		return (format === ISO_FORMAT || format.toUpperCase() === String('iso').toUpperCase());
+		return (format === ISO_FORMAT || format.toUpperCase() === String(&#x27;iso&#x27;).toUpperCase());
 	}
 	else{
 		var nb_ts = this.getNbTS();
-		for (var i=0; i<nb_ts; i++){
+		for (var i=0; i&lt;nb_ts; i++){
 
 			format = this.getTimestampFormat(i);
-			if (format !== ISO_FORMAT && format.toUpperCase() !== String('iso').toUpperCase()) //FIXME: it could be wrong
+			if (format !== ISO_FORMAT &amp;&amp; format.toUpperCase() !== String(&#x27;iso&#x27;).toUpperCase()) //FIXME: it could be wrong
 				return false;
 		}
 
@@ -673,13 +751,13 @@ tsproc.prototype.isISO = function(ts_index){
  * @param {function} callback A callback function
  *
  * @example
- *     var tsproc = require('tsproc');
+ *     var tsproc = require(&#x27;tsproc&#x27;);
  *
  *     var config = {}; //config example is in the tsproc method
  * 
  *     var ts = [
- *     		[{a: 18.11, year:'2011'}, {a: 21.07, year:'2012'}],
- *    		    [{b: 26.42, year:'2012'}, {b: 24.11, year:'2013'}]
+ *     		[{a: 18.11, year:&#x27;2011&#x27;}, {a: 21.07, year:&#x27;2012&#x27;}],
+ *    		    [{b: 26.42, year:&#x27;2012&#x27;}, {b: 24.11, year:&#x27;2013&#x27;}]
  *          ];
  *     
  *     var tsp = new tsproc(ts, config, null);
@@ -690,12 +768,12 @@ tsproc.prototype.isISO = function(ts_index){
  *     		//the result is:
  *     		//[
  *     		//	[
- *    			//		{a: 18.11, year: '2011-01-01T00:00:00.000Z'},
- *    			//		{a: 21.07, year: '2012-01-01T00:00:00.000Z'}
+ *    			//		{a: 18.11, year: &#x27;2011-01-01T00:00:00.000Z&#x27;},
+ *    			//		{a: 21.07, year: &#x27;2012-01-01T00:00:00.000Z&#x27;}
  *     		//  ],
  *     		//	[
- *    			//		{b: 26.42, year: '2012-01-01T00:00:00.000Z'},
- *    			//		{b: 24.11, year: '2013-01-01T00:00:00.000Z'}
+ *    			//		{b: 26.42, year: &#x27;2012-01-01T00:00:00.000Z&#x27;},
+ *    			//		{b: 24.11, year: &#x27;2013-01-01T00:00:00.000Z&#x27;}
  *     		//  ]
  *     		//]
  *     });
@@ -709,12 +787,12 @@ tsproc.prototype.toISO = function(callback){
 		//number of timeseries
 		var ts_size,nb_ts = this._timeseries.length;
 
-		for (i=0; i<nb_ts; i++){
+		for (i=0; i&lt;nb_ts; i++){
 
 			//number of documents in timeseries
 			ts_size = this._timeseries[i].length;
 
-			for (j=0; j<ts_size; j++){
+			for (j=0; j&lt;ts_size; j++){
 
 				//get date in iso
 				date = this.getTimestamp(i,j);
@@ -743,29 +821,29 @@ tsproc.prototype.toISO = function(callback){
  * @param {function} callback A callback function
  *
  * @example
- *     var tsproc = require('tsproc');
+ *     var tsproc = require(&#x27;tsproc&#x27;);
  *
  *     var config = {}; //config example is in the tsproc method
  * 
  *     var ts = [
- *     		[{a: 18.11, year:'2011'}, {a: 21.07, year:'2012'}, {a: 23.23, year:'2013'}],
- *    		    [{b: 26.42, year:'2012'}, {b: 24.11, year:'2013'}, {b: 22.11, year:'2014'}]
+ *     		[{a: 18.11, year:&#x27;2011&#x27;}, {a: 21.07, year:&#x27;2012&#x27;}, {a: 23.23, year:&#x27;2013&#x27;}],
+ *    		    [{b: 26.42, year:&#x27;2012&#x27;}, {b: 24.11, year:&#x27;2013&#x27;}, {b: 22.11, year:&#x27;2014&#x27;}]
  *          ];
  *     
  *     var tsp = new tsproc(ts, config, null);
  *
- *     tsp.cut(['2012-01-01T00:00:00.000Z', '2013-01-01T00:00:00.000Z'], function(err, timeseries){
+ *     tsp.cut([&#x27;2012-01-01T00:00:00.000Z&#x27;, &#x27;2013-01-01T00:00:00.000Z&#x27;], function(err, timeseries){
  *	
  *	   		if (timeseries) console.log(timeseries);
  *     		//the result is:
  *     		//[
  *     		//	[
- *    			//		{a: 21.07, year: '2012-01-01T00:00:00.000Z'},
- *    			//		{a: 23.23, year: '2013-01-01T00:00:00.000Z'}
+ *    			//		{a: 21.07, year: &#x27;2012-01-01T00:00:00.000Z&#x27;},
+ *    			//		{a: 23.23, year: &#x27;2013-01-01T00:00:00.000Z&#x27;}
  *     		//  ],
  *     		//	[
- *    			//		{b: 26.42, year: '2012-01-01T00:00:00.000Z'},
- *    			//		{b: 24.11, year: '2013-01-01T00:00:00.000Z'}
+ *    			//		{b: 26.42, year: &#x27;2012-01-01T00:00:00.000Z&#x27;},
+ *    			//		{b: 24.11, year: &#x27;2013-01-01T00:00:00.000Z&#x27;}
  *     		//  ]
  *     		//]
  *     });
@@ -775,7 +853,7 @@ tsproc.prototype.cut = function(date_borders, callback){
 	var min_date, max_date;
 
 	//time borders are specified
-	if (date_borders && date_borders[0] && date_borders[1]){
+	if (date_borders &amp;&amp; date_borders[0] &amp;&amp; date_borders[1]){
 
 		min_date = moment.utc(new Date(date_borders[0]));
 		max_date = moment.utc(new Date(date_borders[1]));
@@ -790,7 +868,7 @@ tsproc.prototype.cut = function(date_borders, callback){
 	if (!min_date.isValid() || !max_date.isValid()){
 
 		if (callback)
-			callback(new Error('Invalid borders'), null);
+			callback(new Error(&#x27;Invalid borders&#x27;), null);
 
 		return;
 	}
@@ -809,19 +887,19 @@ tsproc.prototype.cut = function(date_borders, callback){
  * Public method used to merge two or more timeseries 
  * into one timeseries. The timeseries should be homogeneous.
  * The result timeseries would have only one timestamp field 
- * (it's name is specified by TIMESTAMP_FIELD proprety).
+ * (it&#x27;s name is specified by TIMESTAMP_FIELD proprety).
  *
  * @method merge
  * @param {function} callback A callback function
  *
  * @example
- *     var tsproc = require('tsproc');
+ *     var tsproc = require(&#x27;tsproc&#x27;);
  *
  *     var config = {}; //config example is in the tsproc method
  * 
  *     var ts = [
- *     		[{a: 21.07, year:'2012'}, {a: 23.23, year:'2013'}],
- *    		    [{b: 26.42, year:'2012'}, {b: 24.11, year:'2013'}]
+ *     		[{a: 21.07, year:&#x27;2012&#x27;}, {a: 23.23, year:&#x27;2013&#x27;}],
+ *    		    [{b: 26.42, year:&#x27;2012&#x27;}, {b: 24.11, year:&#x27;2013&#x27;}]
  *          ];
  *     
  *     var tsp = new tsproc(ts, config, null);
@@ -831,8 +909,8 @@ tsproc.prototype.cut = function(date_borders, callback){
  *	   		if (timeseries) console.log(timeseries);
  *     		//the result is:
  *     		//[
- *    			//	{a: 21.07, b: 26.42, time: '2012'},
- *    			//	{a: 23.23, b: 24.11, time: '2013'}
+ *    			//	{a: 21.07, b: 26.42, time: &#x27;2012&#x27;},
+ *    			//	{a: 23.23, b: 24.11, time: &#x27;2013&#x27;}
  *     		//]
  *     });
  */
@@ -858,12 +936,12 @@ tsproc.prototype.merge = function(callback){
 		//fusing fields document by document
 		var ts_size = this._timeseries[0].length;
 		var merged_timeseries = [];
-		for (j=0; j<ts_size; j++){
+		for (j=0; j&lt;ts_size; j++){
 
 			//fusing fields into one document
 			doc = {};
 			time = this.getDoc(0,j)[this.getTimestampField(0)]; //save date before deleting
-			for (i=0; i<nb_ts; i++){
+			for (i=0; i&lt;nb_ts; i++){
 				doc = underscore.extend(doc, this.getDoc(i, j));
 				delete doc[this.getTimestampField(i)];
 			}
@@ -904,13 +982,13 @@ tsproc.prototype.merge = function(callback){
  * @param {function} callback A callback function
  *
  * @example
- *     var tsproc = require('tsproc');
+ *     var tsproc = require(&#x27;tsproc&#x27;);
  *
  *     var config = {}; //config example is in the tsproc method
  * 
  *     var ts = [
- *     		[{a: 21.07, year:'2012'}, {a: 23.23, year:'2013'}, {a: 24.24, year:'2014'}, {a: 25.25, year:'2015'}],
- *    		    [{b: 26.42, year:'2012'}, {b: 24.11, year:'2013'}, {b: 22.11, year:'2014'}, {b: 21.01, year:'2015'}]
+ *     		[{a: 21.07, year:&#x27;2012&#x27;}, {a: 23.23, year:&#x27;2013&#x27;}, {a: 24.24, year:&#x27;2014&#x27;}, {a: 25.25, year:&#x27;2015&#x27;}],
+ *    		    [{b: 26.42, year:&#x27;2012&#x27;}, {b: 24.11, year:&#x27;2013&#x27;}, {b: 22.11, year:&#x27;2014&#x27;}, {b: 21.01, year:&#x27;2015&#x27;}]
  *          ];
  *     
  *     var tsp = new tsproc(ts, config, null);
@@ -922,29 +1000,29 @@ tsproc.prototype.merge = function(callback){
  *     		//the result is:
  *     		//[
  *     		//	[
- *    			//		{a: 21.07, year: '2012'},
- *    			//		{a: 24.24, year: '2014'}
+ *    			//		{a: 21.07, year: &#x27;2012&#x27;},
+ *    			//		{a: 24.24, year: &#x27;2014&#x27;}
  *     		//  ],
  *     		//	[
- *    			//		{b: 26.42, year: '2012'},
- *    			//		{b: 22.11, year: '2014'}
+ *    			//		{b: 26.42, year: &#x27;2012&#x27;},
+ *    			//		{b: 22.11, year: &#x27;2014&#x27;}
  *     		//  ]
  *     		//]
  *     });
  *
- *     //max value of field 'a' (type = 3)
- *     tsp.undersample(3, 2, 'a', function(err, timeseries){
+ *     //max value of field &#x27;a&#x27; (type = 3)
+ *     tsp.undersample(3, 2, &#x27;a&#x27;, function(err, timeseries){
  *	
  *	   		if (timeseries) console.log(timeseries);
  *     		//the result is:
  *     		//[
  *     		//	[
- *    			//		{a: 23.23, year: '2013'},
- *    			//		{a: 25.25, year: '2015'}
+ *    			//		{a: 23.23, year: &#x27;2013&#x27;},
+ *    			//		{a: 25.25, year: &#x27;2015&#x27;}
  *     		//  ],
  *     		//	[
- *    			//		{b: 26.42, year: '2012'},
- *    			//		{b: 22.11, year: '2014'}
+ *    			//		{b: 26.42, year: &#x27;2012&#x27;},
+ *    			//		{b: 22.11, year: &#x27;2014&#x27;}
  *     		//  ]
  *     		//]
  *     });
@@ -952,7 +1030,7 @@ tsproc.prototype.merge = function(callback){
 tsproc.prototype.undersample = function(type, skipsize, target_field, callback){
 
 	//neglect skipsize 0 and 1
-	if(skipsize && skipsize > 1){
+	if(skipsize &amp;&amp; skipsize &gt; 1){
 
 		//type is defined in ReduceEnum
 		if(!type) type = 0;
@@ -976,7 +1054,7 @@ tsproc.prototype.undersample = function(type, skipsize, target_field, callback){
  * to interpolate the missing datapoints (document) in relation to 
  * each other.
  * Interpolation methods are: linear, cubic, lanczos, and neares neighbor.
- * Methods comparaison could be found <a href="http://osuushi.github.io/plotdemo016.html">here</a>.
+ * Methods comparaison could be found &lt;a href=&quot;http://osuushi.github.io/plotdemo016.html&quot;&gt;here&lt;/a&gt;.
  * Timestamps should be the ISO strings.
  * Uses a tsinterp module.
  * @method interpolate
@@ -984,13 +1062,13 @@ tsproc.prototype.undersample = function(type, skipsize, target_field, callback){
  * @param {function} callback A callback function
  *
  * @example
- *     var tsproc = require('tsproc');
+ *     var tsproc = require(&#x27;tsproc&#x27;);
  *
  *     var config = {}; //config example is in the tsproc method
  * 
  *     var ts = [
- *     		[{a: 21.07, year:'2012'}, {a: 23.23, year:'2013'}, {a: 24.24, year:'2014'}],
- *    		    [{b: 26.42, year:'2012'}, {b: 24.11, year:'2013'}, {b: 21.01, year:'2015'}]
+ *     		[{a: 21.07, year:&#x27;2012&#x27;}, {a: 23.23, year:&#x27;2013&#x27;}, {a: 24.24, year:&#x27;2014&#x27;}],
+ *    		    [{b: 26.42, year:&#x27;2012&#x27;}, {b: 24.11, year:&#x27;2013&#x27;}, {b: 21.01, year:&#x27;2015&#x27;}]
  *          ];
  *     
  *     var tsp = new tsproc(ts, config, null);
@@ -1005,16 +1083,16 @@ tsproc.prototype.undersample = function(type, skipsize, target_field, callback){
  *     		//the result is:
  *     		//[
  *     		//	[
- *    			//		{year: '2012-01-01T00:00:00.000Z', a: 21.07},
- *    			//		{year: '2013-01-01T00:00:00.000Z', a: 23.23},
- *    			//		{year: '2014-01-01T00:00:00.000Z', a: 24.24},
- *    			//		{year: '2015-01-01T00:00:00.000Z', a: 0}
+ *    			//		{year: &#x27;2012-01-01T00:00:00.000Z&#x27;, a: 21.07},
+ *    			//		{year: &#x27;2013-01-01T00:00:00.000Z&#x27;, a: 23.23},
+ *    			//		{year: &#x27;2014-01-01T00:00:00.000Z&#x27;, a: 24.24},
+ *    			//		{year: &#x27;2015-01-01T00:00:00.000Z&#x27;, a: 0}
  *     		//  ],
  *     		//	[
- *    			//		{year: '2012-01-01T00:00:00.000Z', b: 26.42},
- *    			//		{year: '2013-01-01T00:00:00.000Z', b: 24.11},
- *    			//		{year: '2014-01-01T00:00:00.000Z', b: 22.560000000000002}
- *    			//		{year: '2015-01-01T00:00:00.000Z', b: 21.01}
+ *    			//		{year: &#x27;2012-01-01T00:00:00.000Z&#x27;, b: 26.42},
+ *    			//		{year: &#x27;2013-01-01T00:00:00.000Z&#x27;, b: 24.11},
+ *    			//		{year: &#x27;2014-01-01T00:00:00.000Z&#x27;, b: 22.560000000000002}
+ *    			//		{year: &#x27;2015-01-01T00:00:00.000Z&#x27;, b: 21.01}
  *     		//  ]
  *     		//]
  *     });
@@ -1026,16 +1104,16 @@ tsproc.prototype.undersample = function(type, skipsize, target_field, callback){
  *     		//the result is:
  *     		//[
  *     		//	[
- *    			//		{year: '2012-01-01T00:00:00.000Z', a: 21.07},
- *    			//		{year: '2013-01-01T00:00:00.000Z', a: 23.23},
- *    			//		{year: '2014-01-01T00:00:00.000Z', a: 24.24},
- *    			//		{year: '2015-01-01T00:00:00.000Z', a: 0}
+ *    			//		{year: &#x27;2012-01-01T00:00:00.000Z&#x27;, a: 21.07},
+ *    			//		{year: &#x27;2013-01-01T00:00:00.000Z&#x27;, a: 23.23},
+ *    			//		{year: &#x27;2014-01-01T00:00:00.000Z&#x27;, a: 24.24},
+ *    			//		{year: &#x27;2015-01-01T00:00:00.000Z&#x27;, a: 0}
  *     		//  ],
  *     		//	[
- *    			//		{year: '2012-01-01T00:00:00.000Z', b: 26.42},
- *    			//		{year: '2013-01-01T00:00:00.000Z', b: 24.11},
- *    			//		{year: '2014-01-01T00:00:00.000Z', b: 23.72875}
- *    			//		{year: '2015-01-01T00:00:00.000Z', b: 21.01}
+ *    			//		{year: &#x27;2012-01-01T00:00:00.000Z&#x27;, b: 26.42},
+ *    			//		{year: &#x27;2013-01-01T00:00:00.000Z&#x27;, b: 24.11},
+ *    			//		{year: &#x27;2014-01-01T00:00:00.000Z&#x27;, b: 23.72875}
+ *    			//		{year: &#x27;2015-01-01T00:00:00.000Z&#x27;, b: 21.01}
  *     		//  ]
  *     		//]
  *     });
@@ -1045,7 +1123,7 @@ tsproc.prototype.interpolate = function(type, callback){
 
 	var nb_ts = this.getNbTS();
 
-	if (nb_ts > 1){
+	if (nb_ts &gt; 1){
 
 		var smooth_conf={};
 		var smoothers = new Array(nb_ts);
@@ -1054,7 +1132,7 @@ tsproc.prototype.interpolate = function(type, callback){
 		if (!this.isISO()){
 
 			if (callback)
-				callback(new Error('Dates should have iso format'), null);
+				callback(new Error(&#x27;Dates should have iso format&#x27;), null);
 
 			return;
 		}
@@ -1064,12 +1142,12 @@ tsproc.prototype.interpolate = function(type, callback){
 		smooth_conf.type = type;
 
 		//learn the datapoints of each timeseries
-		for (var i=0; i<nb_ts; i++){
+		for (var i=0; i&lt;nb_ts; i++){
 
 			//config
 			smooth_conf.timestamp_field = this.getTimestampField(i);
 			this.getFields(i).forEach(function(field, index, array){
-				smooth_conf.fields.push({'name': field});
+				smooth_conf.fields.push({&#x27;name&#x27;: field});
 			});
 
 			//learn the timeseries
@@ -1089,10 +1167,10 @@ tsproc.prototype.interpolate = function(type, callback){
 		//interpolate all the timeseries
 		//to the all possible dates
 		var new_timeseries = new Array(nb_ts);
-		for (var i=0; i<nb_ts; i++){
+		for (var i=0; i&lt;nb_ts; i++){
 
 			new_timeseries[i] = [];
-			for (var j=0; j<dates_size; j++){
+			for (var j=0; j&lt;dates_size; j++){
 
 				//get the interpolated document
 				smoothers[i].smooth(all_dates[j], function(err, doc){
@@ -1120,13 +1198,13 @@ tsproc.prototype.interpolate = function(type, callback){
  * @param {function} callback A callback function
  *
  * @example
- *     var tsproc = require('tsproc');
+ *     var tsproc = require(&#x27;tsproc&#x27;);
  *
  *     var config = {}; //config example is in the tsproc method
  * 
  *     var ts = [
- *     		[{a: 21.07, year:'2012'}, {a: 23.23, year:'2013'}, {a: 24.24, year:'2014'}],
- *    		    [{b: 26.42, year:'2012'}, {b: 24.11, year:'2013'}, {b: 21.01, year:'2015'}]
+ *     		[{a: 21.07, year:&#x27;2012&#x27;}, {a: 23.23, year:&#x27;2013&#x27;}, {a: 24.24, year:&#x27;2014&#x27;}],
+ *    		    [{b: 26.42, year:&#x27;2012&#x27;}, {b: 24.11, year:&#x27;2013&#x27;}, {b: 21.01, year:&#x27;2015&#x27;}]
  *          ];
  *     
  *     var tsp = new tsproc(ts, config, null);
@@ -1140,12 +1218,12 @@ tsproc.prototype.interpolate = function(type, callback){
  *     		//the result is:
  *     		//[
  *     		//	[
- *    			//		{year: '2012-01-01T00:00:00.000Z', a: 21.07},
- *    			//		{year: '2013-01-01T00:00:00.000Z', a: 23.23}
+ *    			//		{year: &#x27;2012-01-01T00:00:00.000Z&#x27;, a: 21.07},
+ *    			//		{year: &#x27;2013-01-01T00:00:00.000Z&#x27;, a: 23.23}
  *     		//  ],
  *     		//	[
- *    			//		{year: '2012-01-01T00:00:00.000Z', b: 26.42},
- *    			//		{year: '2013-01-01T00:00:00.000Z', b: 24.11}
+ *    			//		{year: &#x27;2012-01-01T00:00:00.000Z&#x27;, b: 26.42},
+ *    			//		{year: &#x27;2013-01-01T00:00:00.000Z&#x27;, b: 24.11}
  *     		//  ]
  *     		//]
  *     });
@@ -1155,13 +1233,13 @@ tsproc.prototype.intersect = function(callback){
 
 	var nb_ts = this.getNbTS();
 
-	if (nb_ts > 1){
+	if (nb_ts &gt; 1){
 
 		//check date formats
 		if (!this.isISO()){
 
 			if (callback)
-				callback(new Error('Dates should have iso format'), null);
+				callback(new Error(&#x27;Dates should have iso format&#x27;), null);
 
 			return;
 		}
@@ -1174,10 +1252,10 @@ tsproc.prototype.intersect = function(callback){
 		//construct a new timeseries
 		//with intersected dates
 		var new_timeseries = new Array(nb_ts);
-		for (var i=0; i<nb_ts; i++){
+		for (var i=0; i&lt;nb_ts; i++){
 
 			new_timeseries[i] = [];
-			for (var j=0; j<dates_size; j++){
+			for (var j=0; j&lt;dates_size; j++){
 
 				//get the document by its date
 				this.getDocByTimestamp(i, dates[j], function(err, doc){
@@ -1201,22 +1279,22 @@ tsproc.prototype.intersect = function(callback){
  * the local correlation.
  * So a timeseries should be merged (ie the function works with 
  * only a single one timeseries) and have at least two non-timestamp fields.
- * <br/>The similarity is indicated by adding a new field 'correlation' to each document.
- * If value of this field is not 'false', it means that a document is a part 
+ * &lt;br/&gt;The similarity is indicated by adding a new field &#x27;correlation&#x27; to each document.
+ * If value of this field is not &#x27;false&#x27;, it means that a document is a part 
  * of range of documents that are strongly correlated.
- * The correlation is considered strong if correalation coef is > 0.6.
- * <br/>More info about correlation can be found <a href="http://www.statisticshowto.com/what-is-the-correlation-coefficient-formula/">here</a>.
+ * The correlation is considered strong if correalation coef is &gt; 0.6.
+ * &lt;br/&gt;More info about correlation can be found &lt;a href=&quot;http://www.statisticshowto.com/what-is-the-correlation-coefficient-formula/&quot;&gt;here&lt;/a&gt;.
  * @method checkSimilarity
  * @param {function} callback A callback function
  *
  * @example
- *     var tsproc = require('tsproc');
+ *     var tsproc = require(&#x27;tsproc&#x27;);
  *
  *     var config = {}; //config example is in the tsproc method
  * 
  *     var ts = [
- *     		[{a: 21.07, year:'2012'}, {a: 23.23, year:'2013'}, {a: 0.24, year:'2014'}, {a: 25.25, year:'2015'}, {a: 25.25, year:'2016'}, {a: 25.25, year:'2017'}],
- *    		    [{b: 21.42, year:'2012'}, {b: 23.11, year:'2013'}, {b: 0.11, year:'2014'}, {b: 21.01, year:'2015'}, {b: 4.5, year:'2016'}, {b: 35.2, year:'2017'}]
+ *     		[{a: 21.07, year:&#x27;2012&#x27;}, {a: 23.23, year:&#x27;2013&#x27;}, {a: 0.24, year:&#x27;2014&#x27;}, {a: 25.25, year:&#x27;2015&#x27;}, {a: 25.25, year:&#x27;2016&#x27;}, {a: 25.25, year:&#x27;2017&#x27;}],
+ *    		    [{b: 21.42, year:&#x27;2012&#x27;}, {b: 23.11, year:&#x27;2013&#x27;}, {b: 0.11, year:&#x27;2014&#x27;}, {b: 21.01, year:&#x27;2015&#x27;}, {b: 4.5, year:&#x27;2016&#x27;}, {b: 35.2, year:&#x27;2017&#x27;}]
  *          ];
  *     
  *     var tsp = new tsproc(ts, config, null);
@@ -1230,12 +1308,12 @@ tsproc.prototype.intersect = function(callback){
  *	   		if (timeseries) console.log(timeseries);
  *     		//the result is:
  *     		//[
- *     		//	{a: 21.07, b: 21.42, time: '2012', correlation: 0.9998},
- *     		//	{a: 23.23, b: 23.11, time: '2013', correlation: 0.9998},
- *     		//	{a: 0.24, b: 0.11, time: '2014', correlation: 0.9998},
- *     		//	{a: 25.25, b: 21.01, time: '2015', correlation: false},
- *     		//	{a: 25.25, b: 4.5, time: '2016', correlation: false},
- *     		//	{a: 25.25, b: 35.2, time: '2017', correlation: false} 
+ *     		//	{a: 21.07, b: 21.42, time: &#x27;2012&#x27;, correlation: 0.9998},
+ *     		//	{a: 23.23, b: 23.11, time: &#x27;2013&#x27;, correlation: 0.9998},
+ *     		//	{a: 0.24, b: 0.11, time: &#x27;2014&#x27;, correlation: 0.9998},
+ *     		//	{a: 25.25, b: 21.01, time: &#x27;2015&#x27;, correlation: false},
+ *     		//	{a: 25.25, b: 4.5, time: &#x27;2016&#x27;, correlation: false},
+ *     		//	{a: 25.25, b: 35.2, time: &#x27;2017&#x27;, correlation: false} 
  *     		//]
  *     		//
  *     		// we can conclude that the first three document are strongly correlated
@@ -1247,19 +1325,19 @@ tsproc.prototype.checkSimilarity = function(callback){
 	//working only if correlation detection is demanded
 	//and only with a merged timeseries 
 	//with more than one non timestamp fields
-	if (this._correlation_activated && this.getNbTS() === 1 && this.getFields(0).length > 1){
+	if (this._correlation_activated &amp;&amp; this.getNbTS() === 1 &amp;&amp; this.getFields(0).length &gt; 1){
 
 		var ts_size = this.getTSSize();
 		var values, coef, max;
 
 		//going from left to right
-		for (var i=0; i<ts_size-3; i++){
+		for (var i=0; i&lt;ts_size-3; i++){
 
 			//going from right to left
-			for (var k=ts_size-1; k>i; k--){
+			for (var k=ts_size-1; k&gt;i; k--){
 
 				//do not check the correlation of 
-				//two datapoints (it's eq 1)
+				//two datapoints (it&#x27;s eq 1)
 				if (k - i === 1) continue;
 
 				//get the values from a ragne
@@ -1268,11 +1346,11 @@ tsproc.prototype.checkSimilarity = function(callback){
 				//calc the correlation coef
 				var coef = getCorrelationCoef.call(this, values[0], values[1]);
 				coef = (this._count_negative) ? Math.abs(coef) : coef; //this test does not have an impact on performance
-				if (coef > 0.6){
+				if (coef &gt; 0.6){
 
 					if (this._max_coef){
 
-						//finding the 'strongest' correlation
+						//finding the &#x27;strongest&#x27; correlation
 						//= stoping when the correlation is no more
 						//augmenting
 						do{
@@ -1288,7 +1366,7 @@ tsproc.prototype.checkSimilarity = function(callback){
 							//do not check the correlation of two datapoints
 							if (k - i === 1) break;
 						}
-						while(coef > max);
+						while(coef &gt; max);
 
 						k++;
 						coef = max;
@@ -1340,11 +1418,11 @@ function mergeConfigs(){
 		//copy the fields
 		var config_size = this._config.length;
 		var fields = [];
-		for (var i=0; i<config_size; i++){
+		for (var i=0; i&lt;config_size; i++){
 
 			this.getFields(i).forEach(function(field, index){
 
-				fields.push({'name': field});
+				fields.push({&#x27;name&#x27;: field});
 			});
 		}
 		new_config[0].fields = fields;
@@ -1368,7 +1446,7 @@ function getMinDate(){
 
 	//getting the minimal dates of each timeseries
 	var dates = new Array(nb_ts);
-	for (i=0; i<nb_ts; i++){
+	for (i=0; i&lt;nb_ts; i++){
 
 		dates[i] = this.getTimestamp(i, 0);
 	}
@@ -1392,7 +1470,7 @@ function getMaxDate(){
 
 	//getting the maximal dates of each timeseries
 	var dates = new Array(nb_ts);
-	for (i=0; i<nb_ts; i++){
+	for (i=0; i&lt;nb_ts; i++){
 
 		dates[i] = this.getTimestamp(i, this.getTSSize(i) - 1);
 	}
@@ -1449,11 +1527,11 @@ function cutAboveMax(max_date){
 
 	//cut documents above max_date
 	//of all timeseries
-	for (i=0; i<nb_ts; i++){
+	for (i=0; i&lt;nb_ts; i++){
 
 		//iterate through documents and check the date
 		ts_size = this.getTSSize(i);
-		for (j=ts_size-1; j>=0; j--){
+		for (j=ts_size-1; j&gt;=0; j--){
 
 			//date from timeseries
 			date = this.getTimestamp(i,j);
@@ -1471,7 +1549,7 @@ function cutAboveMax(max_date){
 			}
 
 			//date from timeseries is less than max_date
-			if (diff > 0){
+			if (diff &gt; 0){
 
 				cutAbove.call(this, i, j);
 				break;
@@ -1502,11 +1580,11 @@ function cutBellowMin(min_date){
 
 	//cut documents bellow min_date
 	//of all timeseries
-	for (i=0; i<nb_ts; i++){
+	for (i=0; i&lt;nb_ts; i++){
 
 		//iterate through documents and check the date
 		ts_size = this.getTSSize(i);
-		for (j=0; j<ts_size; j++){
+		for (j=0; j&lt;ts_size; j++){
 
 			//date from timeseries
 			date = this.getTimestamp(i,j);
@@ -1525,7 +1603,7 @@ function cutBellowMin(min_date){
 
 			//date from timeseries is bigger than min_date
 			//documents missing
-			if (diff < 0){
+			if (diff &lt; 0){
 
 				cutBellow.call(this, i, j);
 				break;
@@ -1544,8 +1622,8 @@ function cutBellowMin(min_date){
  * 
  * @example
  *	
- *     //[[{a: 18.01, year:'2011-01-01T00:00:00.000Z'}, {a: 21.07, year:'2012-01-01T00:00:00.000Z'}], [{b: 21.42, year:'2012-01-01T00:00:00.000Z'}, {b: 23.11, year:'2013-01-01T00:00:00.000Z'}]]
- *     console.log(getAllDates.call(this)); //['2011-01-01T00:00:00.000Z', '2012-01-01T00:00:00.000Z', '2013-01-01T00:00:00.000Z']
+ *     //[[{a: 18.01, year:&#x27;2011-01-01T00:00:00.000Z&#x27;}, {a: 21.07, year:&#x27;2012-01-01T00:00:00.000Z&#x27;}], [{b: 21.42, year:&#x27;2012-01-01T00:00:00.000Z&#x27;}, {b: 23.11, year:&#x27;2013-01-01T00:00:00.000Z&#x27;}]]
+ *     console.log(getAllDates.call(this)); //[&#x27;2011-01-01T00:00:00.000Z&#x27;, &#x27;2012-01-01T00:00:00.000Z&#x27;, &#x27;2013-01-01T00:00:00.000Z&#x27;]
  *
  */
 function getAllDates(){
@@ -1558,7 +1636,7 @@ function getAllDates(){
 
 		//accumulate all the dates
 		//only singletons are leaved
-		for (var i=0; i<nb_ts; i++){
+		for (var i=0; i&lt;nb_ts; i++){
 
 			all_dates = underscore.union(all_dates, getTSDates.call(this, i));
 		}
@@ -1582,8 +1660,8 @@ function getAllDates(){
  * 
  * @example
  *	
- *     //[[{a: 18.01, year:'2011-01-01T00:00:00.000Z'}, {a: 21.07, year:'2012-01-01T00:00:00.000Z'}], [{b: 21.42, year:'2012-01-01T00:00:00.000Z'}, {b: 23.11, year:'2013-01-01T00:00:00.000Z'}]]
- *     console.log(getSameDates.call(this)); //['2012-01-01T00:00:00.000Z']
+ *     //[[{a: 18.01, year:&#x27;2011-01-01T00:00:00.000Z&#x27;}, {a: 21.07, year:&#x27;2012-01-01T00:00:00.000Z&#x27;}], [{b: 21.42, year:&#x27;2012-01-01T00:00:00.000Z&#x27;}, {b: 23.11, year:&#x27;2013-01-01T00:00:00.000Z&#x27;}]]
+ *     console.log(getSameDates.call(this)); //[&#x27;2012-01-01T00:00:00.000Z&#x27;]
  *
  */
 function getSameDates(){
@@ -1595,7 +1673,7 @@ function getSameDates(){
 	if (this.isISO()){
 
 		//leave only intersected dates
-		for (var i=1; i<nb_ts; i++){
+		for (var i=1; i&lt;nb_ts; i++){
 
 			same_dates = underscore.intersection(same_dates, getTSDates.call(this, i));
 		}
@@ -1612,8 +1690,8 @@ function getSameDates(){
  * @return {array} An array of dates from a specific timeseries
  * @example
  *	
- *     //[[{a: 18.01, year:'2011-01-01T00:00:00.000Z'}, {a: 21.07, year:'2012-01-01T00:00:00.000Z'}], [{b: 21.42, year:'2012-01-01T00:00:00.000Z'}, {b: 23.11, year:'2013-01-01T00:00:00.000Z'}]]
- *     console.log(getTSDates.call(this, 0)); //['2011-01-01T00:00:00.000Z', '2012-01-01T00:00:00.000Z']
+ *     //[[{a: 18.01, year:&#x27;2011-01-01T00:00:00.000Z&#x27;}, {a: 21.07, year:&#x27;2012-01-01T00:00:00.000Z&#x27;}], [{b: 21.42, year:&#x27;2012-01-01T00:00:00.000Z&#x27;}, {b: 23.11, year:&#x27;2013-01-01T00:00:00.000Z&#x27;}]]
+ *     console.log(getTSDates.call(this, 0)); //[&#x27;2011-01-01T00:00:00.000Z&#x27;, &#x27;2012-01-01T00:00:00.000Z&#x27;]
  *
  */
 function getTSDates(ts_index){
@@ -1631,8 +1709,8 @@ function getTSDates(ts_index){
 	return dates_array;
 }
 
-//[{a:2, b:5, time:1911}, {a:3, b:4, time:1912}, {a:4, b:6, time:1913}] ==> extractValues() ==> [[2, 3, 4], [5, 4, 6]]
-//[{a:2, b:5, time:1911}, {a:3, b:4, time:1912}, {a:4, b:6, time:1913}] ==> extractValues([1, 2]) ==> [[3, 4], [4, 6]]
+//[{a:2, b:5, time:1911}, {a:3, b:4, time:1912}, {a:4, b:6, time:1913}] ==&gt; extractValues() ==&gt; [[2, 3, 4], [5, 4, 6]]
+//[{a:2, b:5, time:1911}, {a:3, b:4, time:1912}, {a:4, b:6, time:1913}] ==&gt; extractValues([1, 2]) ==&gt; [[3, 4], [4, 6]]
 //works only with merged timeseries i.e. when (this.getNbTS() === 1)
 function extractValues(borders){
 
@@ -1644,12 +1722,12 @@ function extractValues(borders){
 
 		//calc the indexes
 		var start_index, end_index;
-		if (borders && borders.length === 2){
+		if (borders &amp;&amp; borders.length === 2){
 
 			start_index = borders[0];
 			end_index = borders[1];
 
-			if ( (start_index >= end_index) || start_index < 0 || end_index > ts_size )
+			if ( (start_index &gt;= end_index) || start_index &lt; 0 || end_index &gt; ts_size )
 				return [];
 		}
 		else{
@@ -1664,16 +1742,16 @@ function extractValues(borders){
 		//values container
 		var nb_fields = fields.length;
 		values = new Array(nb_fields);
-		for (var j=0; j<nb_fields; j++){
+		for (var j=0; j&lt;nb_fields; j++){
 			values[j] = new Array();
 		}
 
 		//extracting
 		var doc;
-		for (var i=start_index; i<=end_index; i++){
+		for (var i=start_index; i&lt;=end_index; i++){
 
 			doc = this.getDoc(0, i);
-			for (var j=0; j<nb_fields; j++){
+			for (var j=0; j&lt;nb_fields; j++){
 
 				values[j].push(+doc[fields[j]]);
 			}
@@ -1683,13 +1761,13 @@ function extractValues(borders){
 	return values;
 }
 
-//getCorrelationCoef([1, 2, 3, 4, 5, 6], [2, 2, 3, 4, 5, 60]) ==> 0.69
+//getCorrelationCoef([1, 2, 3, 4, 5, 6], [2, 2, 3, 4, 5, 60]) ==&gt; 0.69
 //http://www.statisticshowto.com/what-is-the-correlation-coefficient-formula/
 function getCorrelationCoef(array1, array2){
 
 	var coef = null;
 
-	if (array1 && array1.length && array2 && array2.length){
+	if (array1 &amp;&amp; array1.length &amp;&amp; array2 &amp;&amp; array2.length){
 
 		var n = array1.length;
 		var sum_xy = 0;
@@ -1698,7 +1776,7 @@ function getCorrelationCoef(array1, array2){
 		var x,y;
 
 		//calculate the sums
-		for (var i=0; i<n; i++){
+		for (var i=0; i&lt;n; i++){
 
 			//values
 			x = array1[i];
@@ -1727,24 +1805,24 @@ function markCorrelation(borders, corr_value){
 
 	//working only with a merged timeseries 
 	//with more than one non timestamp fields
-	if (this.getNbTS() === 1 && this.getFields(0).length > 1){
+	if (this.getNbTS() === 1 &amp;&amp; this.getFields(0).length &gt; 1){
 
 		var ts_size = this.getTSSize();
-		var field_name = 'correlation';
+		var field_name = &#x27;correlation&#x27;;
 
 		//correlation value
 		//if there is no correlation
-		//it's value is equals to false
+		//it&#x27;s value is equals to false
 		var correlation = (corr_value) ? +corr_value : false;
 
 		//calc the indexes
 		var start_index, end_index;
-		if (borders && borders.length === 2){
+		if (borders &amp;&amp; borders.length === 2){
 
 			start_index = borders[0];
 			end_index = borders[1];
 
-			if ( (start_index >= end_index) || start_index < 0 || end_index > ts_size )
+			if ( (start_index &gt;= end_index) || start_index &lt; 0 || end_index &gt; ts_size )
 				return;
 		}
 		else{
@@ -1755,7 +1833,7 @@ function markCorrelation(borders, corr_value){
 
 		//marking
 		var doc;
-		for (var i=start_index; i<=end_index; i++){ //end_index is an index, not length
+		for (var i=start_index; i&lt;=end_index; i++){ //end_index is an index, not length
 
 			doc = this.getDoc(0, i);
 
@@ -1767,3 +1845,16 @@ function markCorrelation(borders, corr_value){
 }
 
 module.exports = tsproc;
+
+</pre>
+
+</div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/js/tabs.js"></script>
+</body>
+</html>
