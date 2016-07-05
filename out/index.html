@@ -86,29 +86,26 @@
 <h3>Usage</h3>
 
 <p>
-	In order to import the module localy to the Node.js project you should manually add it by doing:
 
-<pre class="code prettyprint prettyprinted">
-<code>
-	cd ~/project_path/node_modules
-	mkdir tsproc
-	cp -R ../tsproc_path/tsproc/lib ./tsproc
-	cp ../tsproc_path/tsproc/index.js ./tsproc
-	cp ../tsproc_path/tsproc/package.json ./tsproc
-</code>
-</pre>
-
-Then, in order to make it visible to your project add the next line to the dev dependecis of your <span class="str">package.json</span> file:
+In order to import the module locally to your Node.js project add the next line to the dev dependecis of your <span class="str">package.json</span> file:
 
 <pre class="code prettyprint prettyprinted">
 <code>
 	"devDependencies": {
-		"tsproc": "file:../tsproc"
+		"tsproc": "file:../../path_to_tsproc_dir/tsproc"
 	}
 </code>
 </pre>
 
-When it's done, you can require the module int your code:
+The next step is to install tsproc with all it's dependencies (<span class="str">moment.js</span> and <span class="str">underscore.js</span>):
+
+<pre class="code prettyprint prettyprinted">
+<code>
+	sudo npm install
+</code>
+</pre>
+
+When it's done, you can require the module in your code:
 <pre class="code prettyprint prettyprinted">
 <code>
 	<span class="kwd">var</span> <span class="pln">tsproc</span> <span class="pun">=</span><span class="pln"> </span><span class="kwd">require</span><span class="pun">(</span><span class="str">'tsproc'</span><span class="pun">);</span>
