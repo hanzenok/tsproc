@@ -104,7 +104,7 @@
             "namespace": "",
             "file": "lib/tsreductions.js",
             "line": 5,
-            "description": "Class contaning the reduction functions\nused by the tsproc class."
+            "description": "Class contaning the size reduction functions\nused by the tsproc class."
         }
     },
     "elements": {},
@@ -940,18 +940,18 @@
         {
             "file": "lib/tsreductions.js",
             "line": 12,
-            "description": "Reduction by skipping 'skipsize' documents.",
+            "description": "Reduction of the timeseries size by choosing one document \n(allways the first one) from the set of documents.",
             "itemtype": "method",
             "name": "reduceSkip",
             "params": [
                 {
                     "name": "skipsize",
-                    "description": "A number of documents to skip",
+                    "description": "A number of documents to choose from",
                     "type": "Int"
                 }
             ],
             "return": {
-                "description": "Reduced timeseries",
+                "description": "Size reduced timeseries",
                 "type": "Timeseries"
             },
             "example": [
@@ -962,19 +962,19 @@
         },
         {
             "file": "lib/tsreductions.js",
-            "line": 46,
-            "description": "Reduction by summing the values of all the\nfields of 'skipsize' documents.",
+            "line": 47,
+            "description": "Reduction of the timeseries size \nby summing the values of all the\nfields in a set of documents.",
             "itemtype": "method",
             "name": "reduceSum",
             "params": [
                 {
                     "name": "skipsize",
-                    "description": "A number of documents to\ncalculate the sum (of the respective fields of each document)",
+                    "description": "A number of documents to\nbe reduced into one by summing",
                     "type": "Int"
                 }
             ],
             "return": {
-                "description": "Reduced timeseries",
+                "description": "Size reduced timeseries",
                 "type": "Timeseries"
             },
             "example": [
@@ -985,19 +985,19 @@
         },
         {
             "file": "lib/tsreductions.js",
-            "line": 98,
-            "description": "Reduction by averaging the values of all the\nfields of 'skipsize' documents.",
+            "line": 100,
+            "description": "Reduction of the timeseries size \nby averaging the values of all the\nfields in a set of documents.",
             "itemtype": "method",
             "name": "reduceAvg",
             "params": [
                 {
                     "name": "skipsize",
-                    "description": "A number of documents to\ncalculate the average (of the respective fields of each document)",
+                    "description": "A number of documents to\nbe reduced into one by averaging",
                     "type": "Int"
                 }
             ],
             "return": {
-                "description": "Reduced timeseries",
+                "description": "Size reduced timeseries",
                 "type": "Timeseries"
             },
             "example": [
@@ -1008,14 +1008,14 @@
         },
         {
             "file": "lib/tsreductions.js",
-            "line": 156,
-            "description": "Reduction by finding the document with\nthe max value of 'target_field' between 'skipsize' documents.",
+            "line": 159,
+            "description": "Reduction of the timeseries size by finding the document with\nthe max value of 'target_field' between a set of documents.",
             "itemtype": "method",
             "name": "reduceMax",
             "params": [
                 {
                     "name": "skipsize",
-                    "description": "A number of documents to calculate the max",
+                    "description": "A number of documents to be reduced into one by finding the max",
                     "type": "Int"
                 },
                 {
@@ -1025,7 +1025,7 @@
                 }
             ],
             "return": {
-                "description": "Reduced timeseries",
+                "description": "Size reduced timeseries",
                 "type": "Timeseries"
             },
             "example": [
@@ -1036,14 +1036,14 @@
         },
         {
             "file": "lib/tsreductions.js",
-            "line": 208,
-            "description": "Reduction by finding the document with\nthe min value of 'target_field' between 'skipsize' documents.",
+            "line": 211,
+            "description": "Reduction of the timeseries size by finding the document with\nthe min value of 'target_field' between a set of documents.",
             "itemtype": "method",
             "name": "reduceMin",
             "params": [
                 {
                     "name": "skipsize",
-                    "description": "A number of documents to calculate the min",
+                    "description": "A number of documents to be reduced into one by finding the min",
                     "type": "Int"
                 },
                 {
@@ -1053,7 +1053,7 @@
                 }
             ],
             "return": {
-                "description": "Reduced timeseries",
+                "description": "Size reduced timeseries",
                 "type": "Timeseries"
             },
             "example": [

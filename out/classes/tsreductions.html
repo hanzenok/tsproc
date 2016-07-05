@@ -89,7 +89,7 @@
         <div id="main" class="yui3-u">
             <div class="content"><h4>Class tsreductions</h4>
 <span class="foundat">Class defined in: <a href="../files/lib_tsreductions.js.html#l5"><code>lib&#x2F;tsreductions.js:5</code></a></span>
-<div class="intro"><p>Class contaning the reduction functions
+<div class="intro"><p>Class contaning the size reduction functions
 used by the tsproc class.</p>
 </div>
 
@@ -106,21 +106,22 @@ used by the tsproc class.</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsreductions.js.html#l98"><code>lib&#x2F;tsreductions.js:98</code></a>
+        <a href="../files/lib_tsreductions.js.html#l100"><code>lib&#x2F;tsreductions.js:100</code></a>
     </span><br>
-    <p>Reduction by averaging the values of all the
-fields of 'skipsize' documents.</p>
+    <p>Reduction of the timeseries size
+by averaging the values of all the
+fields in a set of documents.</p>
 
     <strong>Parameters:</strong>
     <ul class="params">
         <li>
             <code>skipsize</code> <strong>&lt;Int&gt;</strong>
         <p>A number of documents to
-calculate the average (of the respective fields of each document)</p>
+be reduced into one by averaging</p>
 
         </li>
     </ul>
-    <br><div class="returns"><strong>Returns:</strong> &lt;Timeseries&gt; <p>Reduced timeseries</p>
+    <br><div class="returns"><strong>Returns:</strong> &lt;Timeseries&gt; <p>Size reduced timeseries</p>
 </div>
         <h5>Example</h5>
         <pre class="code prettyprint"><code>var reduced_timseries = reduceAvg.call(this, 5); //calling from tsproc</code></pre>
@@ -132,16 +133,16 @@ calculate the average (of the respective fields of each document)</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsreductions.js.html#l156"><code>lib&#x2F;tsreductions.js:156</code></a>
+        <a href="../files/lib_tsreductions.js.html#l159"><code>lib&#x2F;tsreductions.js:159</code></a>
     </span><br>
-    <p>Reduction by finding the document with
-the max value of 'target_field' between 'skipsize' documents.</p>
+    <p>Reduction of the timeseries size by finding the document with
+the max value of 'target_field' between a set of documents.</p>
 
     <strong>Parameters:</strong>
     <ul class="params">
         <li>
             <code>skipsize</code> <strong>&lt;Int&gt;</strong>
-        <p>A number of documents to calculate the max</p>
+        <p>A number of documents to be reduced into one by finding the max</p>
 
         </li>
         <li>
@@ -151,7 +152,7 @@ to calculate the max</p>
 
         </li>
     </ul>
-    <br><div class="returns"><strong>Returns:</strong> &lt;Timeseries&gt; <p>Reduced timeseries</p>
+    <br><div class="returns"><strong>Returns:</strong> &lt;Timeseries&gt; <p>Size reduced timeseries</p>
 </div>
         <h5>Example</h5>
         <pre class="code prettyprint"><code>var reduced_timseries = reduceMax.call(this, 5, 'temp'); //calling from tsproc</code></pre>
@@ -163,16 +164,16 @@ to calculate the max</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsreductions.js.html#l208"><code>lib&#x2F;tsreductions.js:208</code></a>
+        <a href="../files/lib_tsreductions.js.html#l211"><code>lib&#x2F;tsreductions.js:211</code></a>
     </span><br>
-    <p>Reduction by finding the document with
-the min value of 'target_field' between 'skipsize' documents.</p>
+    <p>Reduction of the timeseries size by finding the document with
+the min value of 'target_field' between a set of documents.</p>
 
     <strong>Parameters:</strong>
     <ul class="params">
         <li>
             <code>skipsize</code> <strong>&lt;Int&gt;</strong>
-        <p>A number of documents to calculate the min</p>
+        <p>A number of documents to be reduced into one by finding the min</p>
 
         </li>
         <li>
@@ -182,7 +183,7 @@ to calculate the min</p>
 
         </li>
     </ul>
-    <br><div class="returns"><strong>Returns:</strong> &lt;Timeseries&gt; <p>Reduced timeseries</p>
+    <br><div class="returns"><strong>Returns:</strong> &lt;Timeseries&gt; <p>Size reduced timeseries</p>
 </div>
         <h5>Example</h5>
         <pre class="code prettyprint"><code>var reduced_timseries = reduceMin.call(this, 5, 'temp'); //calling from tsproc</code></pre>
@@ -196,17 +197,18 @@ to calculate the min</p>
         
         <a href="../files/lib_tsreductions.js.html#l12"><code>lib&#x2F;tsreductions.js:12</code></a>
     </span><br>
-    <p>Reduction by skipping 'skipsize' documents.</p>
+    <p>Reduction of the timeseries size by choosing one document
+(allways the first one) from the set of documents.</p>
 
     <strong>Parameters:</strong>
     <ul class="params">
         <li>
             <code>skipsize</code> <strong>&lt;Int&gt;</strong>
-        <p>A number of documents to skip</p>
+        <p>A number of documents to choose from</p>
 
         </li>
     </ul>
-    <br><div class="returns"><strong>Returns:</strong> &lt;Timeseries&gt; <p>Reduced timeseries</p>
+    <br><div class="returns"><strong>Returns:</strong> &lt;Timeseries&gt; <p>Size reduced timeseries</p>
 </div>
         <h5>Example</h5>
         <pre class="code prettyprint"><code>var reduced_timseries = reduceSkip.call(this, 5); //calling from tsproc</code></pre>
@@ -218,21 +220,22 @@ to calculate the min</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsreductions.js.html#l46"><code>lib&#x2F;tsreductions.js:46</code></a>
+        <a href="../files/lib_tsreductions.js.html#l47"><code>lib&#x2F;tsreductions.js:47</code></a>
     </span><br>
-    <p>Reduction by summing the values of all the
-fields of 'skipsize' documents.</p>
+    <p>Reduction of the timeseries size
+by summing the values of all the
+fields in a set of documents.</p>
 
     <strong>Parameters:</strong>
     <ul class="params">
         <li>
             <code>skipsize</code> <strong>&lt;Int&gt;</strong>
         <p>A number of documents to
-calculate the sum (of the respective fields of each document)</p>
+be reduced into one by summing</p>
 
         </li>
     </ul>
-    <br><div class="returns"><strong>Returns:</strong> &lt;Timeseries&gt; <p>Reduced timeseries</p>
+    <br><div class="returns"><strong>Returns:</strong> &lt;Timeseries&gt; <p>Size reduced timeseries</p>
 </div>
         <h5>Example</h5>
         <pre class="code prettyprint"><code>var reduced_timseries = reduceSum.call(this, 5); //calling from tsproc</code></pre>
