@@ -100,7 +100,7 @@ var ISO_FORMAT = &#x27;YYYY-MM-DDTHH:mm:ss.SSSSZ&#x27;; //standart ISO format
  * @type string
  * @description A constant that holds the name 
  * of the timestamp field that would be generated 
- * after the merge (see merge() and process() functions).
+ * after the merge (cf merge() and process() functions).
  */
 var TIMESTAMP_FIELD = &#x27;time&#x27;;
 
@@ -133,7 +133,7 @@ var ReduceFunc = tsreductions;
 
 /**
  * Timeseries processor is a class that works
- * with multiple timeseries and offers different methods
+ * with multiple timeseries and offers different public methods
  * to process and explore them.
  *
  * @class tsproc
@@ -141,7 +141,7 @@ var ReduceFunc = tsreductions;
  * @description baasdf fasdf asdf
  * @for tsproc
  * @param {array} timeseries An array of timeseries. Each one should be sorted
- * @param {json} config A description of each timeseries
+ * @param {json} config A description of each timeseries (cf example)
  * @param {function} err_callback Error callback
  * @example
  *     var tsproc = require(&#x27;tsproc&#x27;);
@@ -242,17 +242,16 @@ function tsproc(timeseries, config, err_callback){
 }
 
 /**
- * A main public method that processes the array of timeseries. It returns (via callback) a one timeseries with timestamp field &#x27;time&#x27; in the
- * ISO format. This timeseries correspond to the fusion of an array of timeseries, and if they are not homogeneous the interpolation would be applyed.
+ * A main public method that processes a set of timeseries. It returns (via callback) a single timeseries with timestamp &#x27;time&#x27; with
+ * ISO format.
  *
- * &lt;br/&gt;The processing takes the next steps:
- * - if the borders(min and max dates) are specified in the config file, the timeseries would be cut
+ * The processing takes the next steps:
+ * - if the borders (min and max dates) are specified in the config file, the timeseries would be cut
  * - all the dates would be transformed to the ISO string
- * - if there are multiple timeseries, and they are not homogeneous, all the timeseries would be interpolated or intersected
- * (ie leaving only the documents with dates that are present in all the timeseries)
- * - if the are multiple timeseries, they would be fused into one timeseries document by document
- * - the output timeseries the timestamp field would be called &#x27;time&#x27;
- * - finally, if the skip value is defined, the timeseries would undersampled to decrease the size of the timeseries 
+ * - if there are multiple timeseries, and they are not homogeneous, all the timeseries would be interpolated or intersected (cf intersect() function)
+ * - if the are multiple timeseries (and after the previous step they are all homogeneous), they would be fused into one timeseries document by document
+ * - the output timeseries&#x27;s timestamp field would be called &#x27;time&#x27; and it would be an ISO string
+ * - finally, if the skip value is defined, the timeseries would be undersampled to decrease it&#x27;s size 
  * 
  *
  * @method process
@@ -336,10 +335,12 @@ tsproc.prototype.process = function(callback){
 }
 
 /**
- * Public method that returns one timeseries it there is one, on an array
- * if trere are many.
+ * Public method that returns (directly or via callback) 
+ * one timeseries if there is one,
+ * or an array of timeseries if trere are many.
  *
  * @method getTS
+ * @param  {function} callback Callback function
  * @return {array} One or an array of timeseries
  */
 tsproc.prototype.getTS = function(callback){
@@ -370,10 +371,10 @@ tsproc.prototype.getConfig = function(){
 
 /**
  * Public method that returns the current number of timeseries in 
- * the tsproc.
+ * the tsproc module.
  *
  * @method getNbTS
- * @return {int} Number of current timeseries
+ * @return {int} Number of timeseries available
  */
 tsproc.prototype.getNbTS = function(){
 
@@ -381,8 +382,8 @@ tsproc.prototype.getNbTS = function(){
 }
 
 /**
- * Public method that returns the number of documents in the queried timeseries
- * If there is no timeseries specified, return the size of the first one.
+ * Public method that returns the number of documents in specified timeseries.
+ * If there is no timeseries specified, returns the size of the first one.
  * @method getTSSize
  * @param {int} ts_index The timeseries index
  * @return {int} Size of the timeseries
@@ -424,7 +425,7 @@ tsproc.prototype.getTimestampField = function(ts_index){
 }
 
 /**
- * Public method that returns the format of timestamp field of specified timeseries.
+ * Public method that returns a format of timestamp field of specified timeseries.
  *
  * @method getTimestampFormat
  * @param {int} ts_index The index of timeseries
@@ -436,7 +437,7 @@ tsproc.prototype.getTimestampFormat = function(ts_index){
 }
 
 /**
- * Public method that returns one document from the timeseries.
+ * Public method that returns a single document from the timeseries.
  *
  * @method getTimestampField
  * @param {int} ts_index The index of timeseries
@@ -450,16 +451,16 @@ tsproc.prototype.getDoc = function(ts_index, doc_index){
 
 /**
  * Public method that returns an empty document.
- * It is generated from a normal doucment (specified
+ * It is generated from a normal document (specified
  * by ts_index and doc_index) by emptying all the fields
- * except the timestamp
+ * except the timestamp.
  * Used by tsreductions class.
  *
  * @method getEmptyDoc
  * @param {int} ts_index The index of timeseries
  * @param {int} doc_index The index of the document in the timeseries. Used to 
  * 
- * @return {string} A document with empty fields
+ * @return {string} A document with empty fields except the timestamp
  */
 tsproc.prototype.getEmptyDoc = function(ts_index, doc_index){
 
@@ -476,8 +477,8 @@ tsproc.prototype.getEmptyDoc = function(ts_index, doc_index){
 }
 
 /**
- * Public method that takes a timestamp and returns a document from
- * the timeseries that corresponds to it.
+ * Public method that takes a timestamp and returns (via callback) 
+ * a document from the timeseries that corresponds to it.
  *
  * @method getDocByTimestamp
  * @param {int} ts_index The index of timeseries
@@ -518,7 +519,8 @@ tsproc.prototype.getDocByTimestamp = function(ts_index, timestamp, callback){
 
 
 /**
- * Public method that returns an array of fields present in the specified timeseries (ie in each of it&#x27;s document).
+ * Public method that returns an array of fields present 
+ * in the specified timeseries (ie in each of it&#x27;s document).
  *
  * @method getFields
  * @param {int} ts_index The index of timeseries
@@ -539,39 +541,37 @@ tsproc.prototype.getFields = function(ts_index){
 
 /**
  * Public method that returns an average number of timestamps per day.
- * The timeseries should be homogeneous.
+ * The timeseries should be merged.
  *
  * @method getAvgPerDay
  * @return {float} An average number of timestamps per day
  */
 tsproc.prototype.getAvgPerDay = function(){
 
-	//only if homogeneous
-	if (this.isHomogeneous()){
+	//only if one timeseries (ie merged)
+	if (this.getNbTS() === 1){
 
-		//and only if one timeseries
-		if (this.getNbTS() === 1){
+		//get the borders
+		var min_date = getMinDate.call(this);
+		var max_date = getMaxDate.call(this);
 
-			//get the borders
-			var min_date = getMinDate.call(this);
-			var max_date = getMaxDate.call(this);
+		//number of days between the two borders
+		var nb_days = Math.ceil(max_date.diff(min_date, &#x27;days&#x27;, true));
 
-			//number of days between the two borders
-			var nb_days = Math.ceil(max_date.diff(min_date, &#x27;days&#x27;, true));
+		//timeseries size (number of instances)
+		var ts_size = this.getTSSize();
 
-			//timeseries size (number of instances)
-			var ts_size = this.getTSSize();
-
-			return ts_size/nb_days;
-		}
+		return ts_size/nb_days;
 	}
+
 
 	return 0;
 }
 
 /**
- * Public method that returns the date border (the earliest and the oldest timestamp) in 
- * all the timeseries.
+ * Public method that returns the date borders, which corresponds
+ * to the earliest timestamp from all the timseries and the oldest timestamp 
+ * from all the timeseries. 
  *
  * @method getBorders
  * @return {array} An array with date (string with ISO format) borders
@@ -586,12 +586,13 @@ tsproc.prototype.getBorders = function(){
 
 /**
  * Public method that verifies wheather the timeseries is homogeneous.
+ *
  * If there is only one timeseries, it is considered homogeneous.
  * If there are many, they are considered homogeneous if every timeseries
- * has the same timestamps in the same order. 
+ * has the same timestamps at same positions. 
  *
  * @method isHomogeneous
- * @return {boolean} Wheather a bunch of timeseries are homogeneous
+ * @return {boolean} Wheather a set of timeseries are homogeneous
  *
  * @example
  *     var tsproc = require(&#x27;tsproc&#x27;);
@@ -686,7 +687,7 @@ tsproc.prototype.isValid = function(){
  * Public method that renames a field in the specified timeseries
  *
  * @method renameField
- * @param {int} ts_index The index of timeseries
+ * @param {int} ts_index The index of a timeseries
  * @param {string} field_name A field to rename
  * @param {string} new_name A new field name
  * @param {function} callback A callback function
@@ -747,7 +748,7 @@ tsproc.prototype.renameField = function(ts_index, field_name, new_name, callback
 /**
  * Public method that checks wheather the timestamps have ISO format.
  * The method checks only the config json, it does not verify the timestamps
- * of all documents.
+ * of all the documents.
  *
  * @method isISO
  * @param {int} ts_index The index of timeseries
@@ -846,7 +847,7 @@ tsproc.prototype.toISO = function(callback){
 }
 
 /**
- * Public method used to leave in the 
+ * Public method that leaves in the 
  * timeseries only the documents between
  * two dates specified in the date_borders array
  *
@@ -919,9 +920,10 @@ tsproc.prototype.cut = function(date_borders, callback){
 }
 
 /**
- * Public method used to merge two or more timeseries 
+ * Public method that merges two or more timeseries 
  * into one timeseries. The timeseries should be homogeneous.
- * The result timeseries would have only one timestamp field 
+ *
+ * The result timeseries would have only one timestamp field
  * (it&#x27;s name is specified by TIMESTAMP_FIELD proprety).
  *
  * @method merge
@@ -1000,12 +1002,13 @@ tsproc.prototype.merge = function(callback){
 }
 
 /**
- * Public method that is used to reduce the number
+ * Public method that reduces the number
  * of documents in the timeseries by different
  * methods. Applied only if the timeseries are homogeneous.
  * Uses a tsreductions module.
+ *
  * The reduction mehtods are: 
- * - skip: choose one document from skipsize documents
+ * - skip: choose one document (first) from skipsize documents
  * - sum: sum the values of skipsize documents into one
  * - avg: average the values of skipsize documents into one
  * - max: choose one document from skipsize documents with the maximum value of target_field
@@ -1086,10 +1089,12 @@ tsproc.prototype.undersample = function(type, skipsize, target_field, callback){
 
 /**
  * Public mehtod that could be applied to two or more timeseries
- * to interpolate the missing datapoints (document) in relation to 
+ * to interpolate the missing datapoints (documents) in relation to 
  * each other.
+ *
  * Interpolation methods are: linear, cubic, lanczos, and neares neighbor.
  * Methods comparaison could be found &lt;a href=&quot;http://osuushi.github.io/plotdemo016.html&quot;&gt;here&lt;/a&gt;.
+ *
  * Timestamps should be the ISO strings.
  * Uses a tsinterp module.
  * @method interpolate
@@ -1227,7 +1232,8 @@ tsproc.prototype.interpolate = function(type, callback){
 /**
  * Public mehtod that could be applied to two or more timeseries
  * to simplify them and leave only the documents that have the same
- * timestamps.
+ * timestamps id different timeseries (cf example).
+ *
  * Timestamps should be the ISO strings.
  * @method intersect
  * @param {function} callback A callback function
@@ -1309,16 +1315,19 @@ tsproc.prototype.intersect = function(callback){
 
 /**
  * @description
- * Public method that is used to check the local similarity
+ * Public method that checks the local similarity
  * between the fields of a timeseries. Does this by caclulating
  * the local correlation.
- * So a timeseries should be merged (ie the function works with 
- * only a single one timeseries) and have at least two non-timestamp fields.
- * &lt;br/&gt;The similarity is indicated by adding a new field &#x27;correlation&#x27; to each document.
+ *
+ * Timeseries should be merged (ie the function works with 
+ * only a single timeseries) and have at least two non-timestamp fields.
+ * 
+ * The similarity is indicated by adding a new field &#x27;correlation&#x27; to each document.
  * If value of this field is not &#x27;false&#x27;, it means that a document is a part 
- * of range of documents that are strongly correlated.
+ * of a set of documents that are strongly correlated.
  * The correlation is considered strong if correalation coef is &gt; 0.6.
- * &lt;br/&gt;More info about correlation can be found &lt;a href=&quot;http://www.statisticshowto.com/what-is-the-correlation-coefficient-formula/&quot;&gt;here&lt;/a&gt;.
+ * 
+ * More info about correlation can be found &lt;a href=&quot;http://www.statisticshowto.com/what-is-the-correlation-coefficient-formula/&quot;&gt;here&lt;/a&gt;.
  * @method checkSimilarity
  * @param {function} callback A callback function
  *
@@ -1430,10 +1439,10 @@ tsproc.prototype.checkSimilarity = function(callback){
 }
 
 /**
- * Private function that merges the configuration of 
+ * Private method that merges the configuration of 
  * multiple timeseries into one.
  * The final timestamp name is defined by the 
- * TIMESTAMP_FIELD propretie.
+ * TIMESTAMP_FIELD proprety.
  * @method mergeConfigs
  */
 function mergeConfigs(){
@@ -1517,7 +1526,7 @@ function getMaxDate(){
 /**
  * Private method that cuts in a single timeseries all the documents
  * that are bellow the specified index.
- * Index is also cut.
+ * Index is included in a cut.
  * @method cutBellow
  * @param {int} ts_index An index of a timeseries to cut
  * @param {int} index An index bellow which to cut
@@ -1530,7 +1539,7 @@ function cutBellow(ts_index, index){
 /**
  * Private method that cuts in a single timeseries all the documents
  * that are above the specified index.
- * Index is also cut.
+ * Index is included in a cut.
  * @method cutAbove
  * @param {int} ts_index An index of a timeseries to cut
  * @param {int} index An index bellow which to cut
@@ -1650,6 +1659,7 @@ function cutBellowMin(min_date){
 /**
  * Private method that returns an array
  * of all the possible dates of all the timeseries (without duplication).
+ *
  * The timestamps of all the timeseries shoud be the ISO strings.
  * Final array of dates is sorted.
  * @method getAllDates
@@ -1689,6 +1699,7 @@ function getAllDates(){
 /**
  * Private method that returns an array
  * of dates that are included in all the timeseries.
+ *
  * The timestamps of all the timeseries shoud be the ISO strings.
  * @method getSameDates
  * @return {array} An array of dates (ISO strings) that are part of all timeseries
