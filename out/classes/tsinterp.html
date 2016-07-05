@@ -68,7 +68,6 @@
                             <li><a href="#methods_extractValues">extractValues</a></li>
                             <li><a href="#methods_learn">learn</a></li>
                             <li><a href="#methods_smooth">smooth</a></li>
-                            <li><a href="#methods_tsinterp">tsinterp</a></li>
                     </ul>
                 </div>
             </div>
@@ -89,26 +88,54 @@
 
         <div id="main" class="yui3-u">
             <div class="content"><h4>Class tsinterp</h4>
-<span class="foundat">Class defined in: <a href="../files/lib_tsinterp.js.html#l8"><code>lib&#x2F;tsinterp.js:8</code></a></span>
-<div class="intro"><p>A class that is used to interpolate the missing
-documents in the timeseries. Two public methods:
-a constructor 'tsinterp' that learns the timeseries values
+<span class="foundat">Class defined in: <a href="../files/lib_tsinterp.js.html#l17"><code>lib&#x2F;tsinterp.js:17</code></a></span>
+<div class="intro"><p>A class that fills the missing
+documents in the timeseries by interpolation.</p>
+<p>Two public methods:<br/>
+a constructor 'tsinterp' that learns all the  documents of a timeseries
 and a method 'smooth' that takes as parameter a date
-(string with ISO format) and returns a document with
+(string with ISO format) and returns associated document with
 interpolated values.</p>
+<p>Completely independent from tsproc module, so should be used as a normal Node.js module.</p>
 <p>Based on the <a href='https://github.com/osuushi/Smooth.js/'>Smooth.js</a>
 module.</p>
 </div>
 
 <a name="methods_tsinterp"></a>
 <div class="method item">
-     <strong class="name"><code>tsinterp</code></strong>( <code>  </code> ) 
+     <strong class="name"><code>tsinterp</code></strong>( <code>timeseries, description, callback </code> ) 
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsinterp.js.html#l8"><code>lib&#x2F;tsinterp.js:8</code></a>
+        <a href="../files/lib_tsinterp.js.html#l17"><code>lib&#x2F;tsinterp.js:17</code></a>
     </span><br>
     
+    <strong>Parameters:</strong>
+    <ul class="params">
+        <li>
+            <code>timeseries</code> <strong>&lt;Array&gt;</strong>
+        <p>A timeseries to learn. An array of JSONs</p>
+
+        </li>
+        <li>
+            <code>description</code> <strong>&lt;Json&gt;</strong>
+        <p>A description of fields and timestamps (with their format) of the each timeseries</p>
+
+        </li>
+        <li>
+            <code>callback</code> <strong>&lt;Function&gt;</strong>
+        <p>An error callback</p>
+
+        </li>
+    </ul>
+        <h5>Example</h5>
+        <pre class="code prettyprint"><code>var tsinterp = require('./tsinterp');
+
+var ts = [{ year: '1919-01-01T00:00:00.000Z', flows_funder: 1 }, { year: '1921-01-01T00:00:00.000Z', flows_funder: 3 }];
+var config = {fields: [{name: 'flows_funder'}], type: 0, timestamp_field: 'year'};
+
+var smoother = new tsinterp(ts, config, null);</code></pre>
+
 </div>
 
 <div id="classdocs">
@@ -124,9 +151,10 @@ module.</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsinterp.js.html#l210"><code>lib&#x2F;tsinterp.js:210</code></a>
+        <a href="../files/lib_tsinterp.js.html#l209"><code>lib&#x2F;tsinterp.js:209</code></a>
     </span><br>
-    <p>A private method used to generate a json document.</p>
+    <p>A private method that generates a json document from
+given values.</p>
 
     <strong>Parameters:</strong>
     <ul class="params">
@@ -152,12 +180,16 @@ module.</p>
         
         <a href="../files/lib_tsinterp.js.html#l235"><code>lib&#x2F;tsinterp.js:235</code></a>
     </span><br>
-    <p>A private method used to exract an array of dates (moment.js dates) of all
-the documents.</br>
-<i>[{date: 1911, a: 2, b: 4},{date: 1912, a: 3, b: 1}] ==&gt; [1911, 1912]].</i></p>
+    <p>A private method that exracts an array of dates (moment.js dates) from all the documents
+in a timeseries.</p>
 
     <br><div class="returns"><strong>Returns:</strong> &lt;Array&gt; <p>An array of moment.js dates</p>
 </div>
+        <h5>Example</h5>
+        <pre class="code prettyprint"><code>//[{a: 18.01, year:'2011'}, {a: 21.07, year:'2012'}]
+console.log(extractDates.call(this)); //[2011, 2012]
+</code></pre>
+
 </div>
 <a name="methods_extractValues"></a>
 <div class="method item">
@@ -165,14 +197,17 @@ the documents.</br>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsinterp.js.html#l257"><code>lib&#x2F;tsinterp.js:257</code></a>
+        <a href="../files/lib_tsinterp.js.html#l262"><code>lib&#x2F;tsinterp.js:262</code></a>
     </span><br>
-    <p>A private method used to exract an array of values of all
-the documents.</br>
-<i>[{date: 1911, a: 2, b: 4},{date: 1912, a: 3, b: 1}] ==&gt; [[2, 4], [3, 1]].</i></p>
+    <p>A private method that exracts an array of values of all
+the documents in a timeseries.</br></p>
 
     <br><div class="returns"><strong>Returns:</strong> &lt;Array&gt; <p>An array of values</p>
 </div>
+        <h5>Example</h5>
+        <pre class="code prettyprint"><code>//[{a: 18.01, year:'2011'}, {a: 21.07, year:'2012'}]
+console.log(extractValues.call(this)); //[[18.01], [21.07]]</code></pre>
+
 </div>
 <a name="methods_learn"></a>
 <div class="method item">
@@ -180,7 +215,7 @@ the documents.</br>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsinterp.js.html#l289"><code>lib&#x2F;tsinterp.js:289</code></a>
+        <a href="../files/lib_tsinterp.js.html#l298"><code>lib&#x2F;tsinterp.js:298</code></a>
     </span><br>
     <p>A private method that learns the values
 of each document of the timeseries.</p>
@@ -200,17 +235,17 @@ of each document of the timeseries.</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsinterp.js.html#l109"><code>lib&#x2F;tsinterp.js:109</code></a>
+        <a href="../files/lib_tsinterp.js.html#l108"><code>lib&#x2F;tsinterp.js:108</code></a>
     </span><br>
     <p>A main public method that takes in the date
-and determines based on the previously learnt values
+and determines, based on the previously learnt documents,
 the interpolated document with given date.</p>
 
     <strong>Parameters:</strong>
     <ul class="params">
         <li>
             <code>date</code> <strong>&lt;String&gt;</strong>
-        <p>A date to interpolate</p>
+        <p>A date from which to interpolate (ISO string)</p>
 
         </li>
         <li>
@@ -239,53 +274,15 @@ smoother.smooth('1923-01-01T00:00:00.000Z', function(err, doc){
 });</code></pre>
 
 </div>
-<a name="methods_tsinterp"></a>
-<div class="method item">
-     <strong class="name"><code>tsinterp</code></strong>( <code>timeseries, description, callback </code> ) 
-    <br>
-    <span class="foundat">
-        
-        <a href="../files/lib_tsinterp.js.html#l31"><code>lib&#x2F;tsinterp.js:31</code></a>
-    </span><br>
-    <p>A public constructor that initiates the class and then
-learns the datapoints.</p>
-
-    <strong>Parameters:</strong>
-    <ul class="params">
-        <li>
-            <code>timeseries</code> <strong>&lt;Array&gt;</strong>
-        <p>A timeseries to learn. An array of JSONs</p>
-
-        </li>
-        <li>
-            <code>description</code> <strong>&lt;Json&gt;</strong>
-        <p>A description of fields and timestamps (with their format) of the each document of timeseries</p>
-
-        </li>
-        <li>
-            <code>callback</code> <strong>&lt;Function&gt;</strong>
-        <p>An error callback</p>
-
-        </li>
-    </ul>
-        <h5>Example</h5>
-        <pre class="code prettyprint"><code>var tsinterp = require('./tsinterp');
-
-var ts = [{ year: '1919-01-01T00:00:00.000Z', flows_funder: 1 }, { year: '1921-01-01T00:00:00.000Z', flows_funder: 3 }];
-var config = {fields: [{name: 'flows_funder'}], type: 0, timestamp_field: 'year'};
-
-var smoother = new tsinterp(ts, config, null);</code></pre>
-
-</div>
             </div>
             <div id="props">
 <a name="props_INTERP_METHODS"></a>
 <div class="props item">
-    <code>INTERP_METHODS</code> &lt;<strong>array
-Description of interpolation methods.
-Methods comparation could be found <a href="http://osuushi.github.io/plotdemo016.html">here</a>.</strong>&gt;<br>
-    <span class="foundat"><a href="../files/lib_tsinterp.js.html#l23"><code>lib&#x2F;tsinterp.js:23</code></a></span>
-    
+    <code>INTERP_METHODS</code> &lt;<strong>Array</strong>&gt;<br>
+    <span class="foundat"><a href="../files/lib_tsinterp.js.html#l8"><code>lib&#x2F;tsinterp.js:8</code></a></span>
+    <p>Description of interpolation methods.
+Methods comparation could be found <a href="http://osuushi.github.io/plotdemo016.html">here</a>.</p>
+
 </div>
             </div>
     </div>

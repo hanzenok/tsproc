@@ -73,9 +73,29 @@
             "module": "tsproc",
             "namespace": "",
             "file": "lib/tsinterp.js",
-            "line": 8,
-            "description": "A class that is used to interpolate the missing\ndocuments in the timeseries. Two public methods:\na constructor 'tsinterp' that learns the timeseries values\nand a method 'smooth' that takes as parameter a date\n(string with ISO format) and returns a document with\ninterpolated values.\n\nBased on the <a href='https://github.com/osuushi/Smooth.js/'>Smooth.js</a>\nmodule.",
-            "is_constructor": 1
+            "line": 17,
+            "description": "A class that fills the missing\ndocuments in the timeseries by interpolation.\n\nTwo public methods:<br/>\na constructor 'tsinterp' that learns all the  documents of a timeseries\nand a method 'smooth' that takes as parameter a date\n(string with ISO format) and returns associated document with\ninterpolated values.\n\nCompletely independent from tsproc module, so should be used as a normal Node.js module.\n\nBased on the <a href='https://github.com/osuushi/Smooth.js/'>Smooth.js</a>\nmodule.",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "timeseries",
+                    "description": "A timeseries to learn. An array of JSONs",
+                    "type": "Array"
+                },
+                {
+                    "name": "description",
+                    "description": "A description of fields and timestamps (with their format) of the each timeseries",
+                    "type": "Json"
+                },
+                {
+                    "name": "callback",
+                    "description": "An error callback",
+                    "type": "Function"
+                }
+            ],
+            "example": [
+                "\n    var tsinterp = require('./tsinterp');\n\n    var ts = [{ year: '1919-01-01T00:00:00.000Z', flows_funder: 1 }, { year: '1921-01-01T00:00:00.000Z', flows_funder: 3 }];\n    var config = {fields: [{name: 'flows_funder'}], type: 0, timestamp_field: 'year'};\n\n    var smoother = new tsinterp(ts, config, null);"
+            ]
         },
         "tsproc": {
             "name": "tsproc",
@@ -111,52 +131,24 @@
     "classitems": [
         {
             "file": "lib/tsinterp.js",
-            "line": 23,
+            "line": 8,
             "itemtype": "property",
             "name": "INTERP_METHODS",
-            "type": "array\nDescription of interpolation methods.\nMethods comparation could be found <a href=\"http://osuushi.github.io/plotdemo016.html\">here</a>.",
+            "type": "array",
+            "description": "Description of interpolation methods.\nMethods comparation could be found <a href=\"http://osuushi.github.io/plotdemo016.html\">here</a>.",
             "class": "tsinterp",
             "module": "tsproc"
         },
         {
             "file": "lib/tsinterp.js",
-            "line": 31,
-            "description": "A public constructor that initiates the class and then\nlearns the datapoints.",
-            "itemtype": "method",
-            "name": "tsinterp",
-            "params": [
-                {
-                    "name": "timeseries",
-                    "description": "A timeseries to learn. An array of JSONs",
-                    "type": "Array"
-                },
-                {
-                    "name": "description",
-                    "description": "A description of fields and timestamps (with their format) of the each document of timeseries",
-                    "type": "Json"
-                },
-                {
-                    "name": "callback",
-                    "description": "An error callback",
-                    "type": "Function"
-                }
-            ],
-            "example": [
-                "\n    var tsinterp = require('./tsinterp');\n\n    var ts = [{ year: '1919-01-01T00:00:00.000Z', flows_funder: 1 }, { year: '1921-01-01T00:00:00.000Z', flows_funder: 3 }];\n    var config = {fields: [{name: 'flows_funder'}], type: 0, timestamp_field: 'year'};\n\n    var smoother = new tsinterp(ts, config, null);"
-            ],
-            "class": "tsinterp",
-            "module": "tsproc"
-        },
-        {
-            "file": "lib/tsinterp.js",
-            "line": 109,
-            "description": "A main public method that takes in the date\nand determines based on the previously learnt values\nthe interpolated document with given date.",
+            "line": 108,
+            "description": "A main public method that takes in the date\nand determines, based on the previously learnt documents,\nthe interpolated document with given date.",
             "itemtype": "method",
             "name": "smooth",
             "params": [
                 {
                     "name": "date",
-                    "description": "A date to interpolate",
+                    "description": "A date from which to interpolate (ISO string)",
                     "type": "String"
                 },
                 {
@@ -173,8 +165,8 @@
         },
         {
             "file": "lib/tsinterp.js",
-            "line": 210,
-            "description": "A private method used to generate a json document.",
+            "line": 209,
+            "description": "A private method that generates a json document from\ngiven values.",
             "itemtype": "method",
             "name": "createDoc",
             "params": [
@@ -199,32 +191,38 @@
         {
             "file": "lib/tsinterp.js",
             "line": 235,
-            "description": "A private method used to exract an array of dates (moment.js dates) of all\nthe documents.</br>\n<i>[{date: 1911, a: 2, b: 4},{date: 1912, a: 3, b: 1}] ==> [1911, 1912]].</i>",
+            "description": "A private method that exracts an array of dates (moment.js dates) from all the documents\nin a timeseries.",
             "itemtype": "method",
             "name": "extractDates",
             "return": {
                 "description": "An array of moment.js dates",
                 "type": "Array"
             },
+            "example": [
+                "\n\t\n    //[{a: 18.01, year:'2011'}, {a: 21.07, year:'2012'}]\n    console.log(extractDates.call(this)); //[2011, 2012]\n"
+            ],
             "class": "tsinterp",
             "module": "tsproc"
         },
         {
             "file": "lib/tsinterp.js",
-            "line": 257,
-            "description": "A private method used to exract an array of values of all\nthe documents.</br>\n<i>[{date: 1911, a: 2, b: 4},{date: 1912, a: 3, b: 1}] ==> [[2, 4], [3, 1]].</i>",
+            "line": 262,
+            "description": "A private method that exracts an array of values of all\nthe documents in a timeseries.</br>",
             "itemtype": "method",
             "name": "extractValues",
             "return": {
                 "description": "An array of values",
                 "type": "Array"
             },
+            "example": [
+                "\n\t\n    //[{a: 18.01, year:'2011'}, {a: 21.07, year:'2012'}]\n    console.log(extractValues.call(this)); //[[18.01], [21.07]]"
+            ],
             "class": "tsinterp",
             "module": "tsproc"
         },
         {
             "file": "lib/tsinterp.js",
-            "line": 289,
+            "line": 298,
             "description": "A private method that learns the values\nof each document of the timeseries.",
             "itemtype": "method",
             "name": "learn",
