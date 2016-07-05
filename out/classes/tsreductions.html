@@ -91,6 +91,10 @@
 <span class="foundat">Class defined in: <a href="../files/lib_tsreductions.js.html#l5"><code>lib&#x2F;tsreductions.js:5</code></a></span>
 <div class="intro"><p>Class contaning the size reduction functions
 used by the tsproc class.</p>
+<p>These functions have access to the internal
+methods of tsproc, so from within the tsproc, they should
+be called using the <a href="https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Function/call">call(this, ..)</a>
+method.</p>
 </div>
 
 
@@ -106,7 +110,7 @@ used by the tsproc class.</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsreductions.js.html#l100"><code>lib&#x2F;tsreductions.js:100</code></a>
+        <a href="../files/lib_tsreductions.js.html#l106"><code>lib&#x2F;tsreductions.js:106</code></a>
     </span><br>
     <p>Reduction of the timeseries size
 by averaging the values of all the
@@ -133,7 +137,7 @@ be reduced into one by averaging</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsreductions.js.html#l159"><code>lib&#x2F;tsreductions.js:159</code></a>
+        <a href="../files/lib_tsreductions.js.html#l165"><code>lib&#x2F;tsreductions.js:165</code></a>
     </span><br>
     <p>Reduction of the timeseries size by finding the document with
 the max value of 'target_field' between a set of documents.</p>
@@ -164,7 +168,7 @@ to calculate the max</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsreductions.js.html#l211"><code>lib&#x2F;tsreductions.js:211</code></a>
+        <a href="../files/lib_tsreductions.js.html#l217"><code>lib&#x2F;tsreductions.js:217</code></a>
     </span><br>
     <p>Reduction of the timeseries size by finding the document with
 the min value of 'target_field' between a set of documents.</p>
@@ -195,7 +199,7 @@ to calculate the min</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsreductions.js.html#l12"><code>lib&#x2F;tsreductions.js:12</code></a>
+        <a href="../files/lib_tsreductions.js.html#l18"><code>lib&#x2F;tsreductions.js:18</code></a>
     </span><br>
     <p>Reduction of the timeseries size by choosing one document
 (allways the first one) from the set of documents.</p>
@@ -220,7 +224,7 @@ to calculate the min</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsreductions.js.html#l47"><code>lib&#x2F;tsreductions.js:47</code></a>
+        <a href="../files/lib_tsreductions.js.html#l53"><code>lib&#x2F;tsreductions.js:53</code></a>
     </span><br>
     <p>Reduction of the timeseries size
 by summing the values of all the

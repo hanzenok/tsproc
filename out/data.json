@@ -104,7 +104,7 @@
             "namespace": "",
             "file": "lib/tsreductions.js",
             "line": 5,
-            "description": "Class contaning the size reduction functions\nused by the tsproc class."
+            "description": "Class contaning the size reduction functions\nused by the tsproc class.\n\nThese functions have access to the internal\nmethods of tsproc, so from within the tsproc, they should\nbe called using the <a href=\"https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Function/call\">call(this, ..)</a>\nmethod."
         }
     },
     "elements": {},
@@ -939,7 +939,7 @@
         },
         {
             "file": "lib/tsreductions.js",
-            "line": 12,
+            "line": 18,
             "description": "Reduction of the timeseries size by choosing one document \n(allways the first one) from the set of documents.",
             "itemtype": "method",
             "name": "reduceSkip",
@@ -962,7 +962,7 @@
         },
         {
             "file": "lib/tsreductions.js",
-            "line": 47,
+            "line": 53,
             "description": "Reduction of the timeseries size \nby summing the values of all the\nfields in a set of documents.",
             "itemtype": "method",
             "name": "reduceSum",
@@ -985,7 +985,7 @@
         },
         {
             "file": "lib/tsreductions.js",
-            "line": 100,
+            "line": 106,
             "description": "Reduction of the timeseries size \nby averaging the values of all the\nfields in a set of documents.",
             "itemtype": "method",
             "name": "reduceAvg",
@@ -1008,7 +1008,7 @@
         },
         {
             "file": "lib/tsreductions.js",
-            "line": 159,
+            "line": 165,
             "description": "Reduction of the timeseries size by finding the document with\nthe max value of 'target_field' between a set of documents.",
             "itemtype": "method",
             "name": "reduceMax",
@@ -1036,7 +1036,7 @@
         },
         {
             "file": "lib/tsreductions.js",
-            "line": 211,
+            "line": 217,
             "description": "Reduction of the timeseries size by finding the document with\nthe min value of 'target_field' between a set of documents.",
             "itemtype": "method",
             "name": "reduceMin",
