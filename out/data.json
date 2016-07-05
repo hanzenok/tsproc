@@ -26,7 +26,9 @@
             "classes": {
                 "tsproc": 1
             },
-            "fors": {},
+            "fors": {
+                "tsproc": 1
+            },
             "namespaces": {}
         },
         "lib/tsreductions.js": {
@@ -53,6 +55,7 @@
             },
             "fors": {
                 "tsinterp": 1,
+                "tsproc": 1,
                 "tsreductions": 1
             },
             "namespaces": {},
@@ -108,9 +111,29 @@
             "module": "tsproc",
             "namespace": "",
             "file": "lib/tsproc.js",
-            "line": 5,
-            "description": "Timeseries processor is a class that works\nwith timeseries and offers different methods\nto process it.",
-            "is_constructor": 1
+            "line": 56,
+            "description": "Timeseries processor is a class that works\nwith multiple timeseries and offers different methods\nto process and explore them.",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "timeseries",
+                    "description": "An array of timeseries. Each one should be sorted",
+                    "type": "Array"
+                },
+                {
+                    "name": "config",
+                    "description": "A description of each timeseries",
+                    "type": "Json"
+                },
+                {
+                    "name": "err_callback",
+                    "description": "Error callback",
+                    "type": "Function"
+                }
+            ],
+            "example": [
+                "\n    var tsproc = require('tsproc');\n\n    var config = {\n    \t\t\"transform\":{\"type\":\"interp\",\"interp_type\":\"linear\"},\n\n    \t\t\"reduction\":{\"type\":\"skip\",\"size\":1,\"target_field\":\"\"},\n\n    \t\t\"date_borders\":{\"from\":{\"date\":\"\"},\"to\":{\"date\":\"\"}},\n\n    \t\t\"correlation\":{\"count_negative\":false,\"max_coef\":true},\n\n    \t\t\"timeseries\":\n\t    \t\t[\n\t\t\t\t\t{\n\t\t\t\t\t\"fields\":\n\t\t\t\t\t\t[\n\t\t\t\t\t\t\t{\"name\":\"a\"}\n\t\t\t\t\t\t],\n\n\t\t\t\t\t\"timestamp\":{\"name\":\"year\",\"format\":\"YYYY\"}\n\t\t\t\t\t},\n\n\t\t\t\t\t{\n\t\t\t\t\t\"fields\":\n\t\t\t\t\t\t[\n\t\t\t\t\t\t\t{\"name\":\"b\"}\n\t\t\t\t\t\t],\t\n\n\t\t\t\t\t\"timestamp\":{\"name\":\"year\",\"format\":\"YYYY\"}\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t};\n\n    var ts = [\n    \t\t[{a: 18.11, year:'2011'}, {a: 21.07, year:'2012'}],\n   \t\t    [{b: 26.42, year:'2012'}, {b: 21.07, year:'2013'}]\n         ]\n    \n    var tsp = new tsproc(ts, config, null);"
+            ]
         },
         "tsreductions": {
             "name": "tsreductions",
@@ -238,36 +261,57 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 26,
-            "description": "A public constructor that is used to initiate \nthe class. It takes in an array of timeseries.",
-            "itemtype": "method",
-            "name": "tsproc",
-            "params": [
-                {
-                    "name": "timeseries",
-                    "description": "An array of timeseries. Each one should be sorted",
-                    "type": "Array"
-                },
-                {
-                    "name": "config",
-                    "description": "A description of each timeseries",
-                    "type": "Json"
-                },
-                {
-                    "name": "err_callback",
-                    "description": "Error callback",
-                    "type": "Function"
-                }
-            ],
-            "example": [
-                "\n    var tsproc = require('tsproc');\n\n    var config = {\n    \t\t\"transform\":{\"type\":\"interp\",\"interp_type\":\"linear\"},\n\n    \t\t\"reduction\":{\"type\":\"skip\",\"size\":1,\"target_field\":\"\"},\n\n    \t\t\"date_borders\":{\"from\":{\"date\":\"\"},\"to\":{\"date\":\"\"}},\n\n    \t\t\"correlation\":{\"count_negative\":false,\"max_coef\":true},\n\n    \t\t\"timeseries\":\n\t    \t\t[\n\t\t\t\t\t{\n\t\t\t\t\t\"fields\":\n\t\t\t\t\t\t[\n\t\t\t\t\t\t\t{\"name\":\"a\"}\n\t\t\t\t\t\t],\n\n\t\t\t\t\t\"timestamp\":{\"name\":\"year\",\"format\":\"YYYY\"}\n\t\t\t\t\t},\n\n\t\t\t\t\t{\n\t\t\t\t\t\"fields\":\n\t\t\t\t\t\t[\n\t\t\t\t\t\t\t{\"name\":\"b\"}\n\t\t\t\t\t\t],\t\n\n\t\t\t\t\t\"timestamp\":{\"name\":\"year\",\"format\":\"YYYY\"}\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t};\n\n    var ts = [\n    \t\t[{a: 18.11, year:'2011'}, {a: 21.07, year:'2012'}],\n   \t\t    [{b: 26.42, year:'2012'}, {b: 21.07, year:'2013'}]\n         ]\n    \n    var tsp = new tsproc(ts, config, null);"
-            ],
+            "line": 10,
+            "itemtype": "property",
+            "name": "ISO_FORMAT",
+            "type": "string",
+            "description": "A constant that holds\nthe format of ISO date.",
             "class": "tsproc",
             "module": "tsproc"
         },
         {
             "file": "lib/tsproc.js",
-            "line": 131,
+            "line": 19,
+            "itemtype": "property",
+            "name": "TIMESTAMP_FIELD",
+            "type": "string",
+            "description": "A constant that holds the name \nof the timestamp field that would be generated \nafter the merge (see merge() and process() functions).",
+            "class": "tsproc",
+            "module": "tsproc"
+        },
+        {
+            "file": "lib/tsproc.js",
+            "line": 29,
+            "itemtype": "property",
+            "name": "InterpEnum",
+            "type": "json",
+            "description": "A description of interpolation\nmethods offered by the tsinterp class.",
+            "class": "tsproc",
+            "module": "tsproc"
+        },
+        {
+            "file": "lib/tsproc.js",
+            "line": 38,
+            "itemtype": "property",
+            "name": "ReduceEnum",
+            "type": "json",
+            "description": "A description of timeseries size\nreduction methods offered by the tsreduction class.",
+            "class": "tsproc",
+            "module": "tsproc"
+        },
+        {
+            "file": "lib/tsproc.js",
+            "line": 47,
+            "itemtype": "property",
+            "name": "ReduceFunc",
+            "type": "array",
+            "description": "An array of timeseries size\nreduction functions.",
+            "class": "tsproc",
+            "module": "tsproc"
+        },
+        {
+            "file": "lib/tsproc.js",
+            "line": 166,
             "description": "A main public method that processes the array of timeseries. It returns (via callback) a one timeseries with timestamp field 'time' in the\nISO format. This timeseries correspond to the fusion of an array of timeseries, and if they are not homogeneous the interpolation would be applyed.\n\n<br/>The processing takes the next steps:\n- if the borders(min and max dates) are specified in the config file, the timeseries would be cut\n- all the dates would be transformed to the ISO string\n- if there are multiple timeseries, and they are not homogeneous, all the timeseries would be interpolated or intersected\n(ie leaving only the documents with dates that are present in all the timeseries)\n- if the are multiple timeseries, they would be fused into one timeseries document by document\n- the output timeseries the timestamp field would be called 'time'\n- finally, if the skip value is defined, the timeseries would undersampled to decrease the size of the timeseries",
             "itemtype": "method",
             "name": "process",
@@ -286,7 +330,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 225,
+            "line": 260,
             "description": "Public method that returns one timeseries it there is one, on an array\nif trere are many.",
             "itemtype": "method",
             "name": "getTS",
@@ -299,7 +343,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 247,
+            "line": 282,
             "description": "Public method that returns a timeseries config json.",
             "itemtype": "method",
             "name": "getConfig",
@@ -312,7 +356,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 258,
+            "line": 293,
             "description": "Public method that returns the current number of timeseries in \nthe tsproc.",
             "itemtype": "method",
             "name": "getNbTS",
@@ -325,7 +369,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 270,
+            "line": 305,
             "description": "Public method that returns the number of documents in the queried timeseries\nIf there is no timeseries specified, return the size of the first one.",
             "itemtype": "method",
             "name": "getTSSize",
@@ -345,7 +389,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 285,
+            "line": 320,
             "description": "Public method that returns the timestamp value (moment.js) of a specified document.",
             "itemtype": "method",
             "name": "getTimestamp",
@@ -370,7 +414,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 301,
+            "line": 336,
             "description": "Public method that returns the name of timestamp field of specified timeseries.",
             "itemtype": "method",
             "name": "getTimestampField",
@@ -390,7 +434,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 313,
+            "line": 348,
             "description": "Public method that returns the format of timestamp field of specified timeseries.",
             "itemtype": "method",
             "name": "getTimestampFormat",
@@ -410,7 +454,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 325,
+            "line": 360,
             "description": "Public method that returns one document from the timeseries.",
             "itemtype": "method",
             "name": "getTimestampField",
@@ -435,7 +479,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 338,
+            "line": 373,
             "description": "Public method that returns an empty document.\nIt is generated from a normal doucment (specified\nby ts_index and doc_index) by emptying all the fields\nexcept the timestamp\nUsed by tsreductions class.",
             "itemtype": "method",
             "name": "getEmptyDoc",
@@ -460,7 +504,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 365,
+            "line": 400,
             "description": "Public method that takes a timestamp and returns a document from\nthe timeseries that corresponds to it.",
             "itemtype": "method",
             "name": "getDocByTimestamp",
@@ -486,7 +530,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 407,
+            "line": 442,
             "description": "Public method that returns an array of fields present in the specified timeseries (ie in each of it's document).",
             "itemtype": "method",
             "name": "getFields",
@@ -506,7 +550,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 427,
+            "line": 462,
             "description": "Public method that returns an average number of timestamps per day.\nThe timeseries should be homogeneous.",
             "itemtype": "method",
             "name": "getAvgPerDay",
@@ -519,7 +563,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 459,
+            "line": 494,
             "description": "Public method that returns the date border (the earliest and the oldest timestamp) in \nall the timeseries.",
             "itemtype": "method",
             "name": "getBorders",
@@ -532,7 +576,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 474,
+            "line": 509,
             "description": "Public method that verifies wheather the timeseries is homogeneous.\nIf there is only one timeseries, it is considered homogeneous.\nIf there are many, they are considered homogeneous if every timeseries\nhas the same timestamps in the same order.",
             "itemtype": "method",
             "name": "isHomogeneous",
@@ -548,7 +592,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 546,
+            "line": 581,
             "description": "Public method that checks wheather the format of the dates in each\ntimeseries is correct.",
             "itemtype": "method",
             "name": "isValid",
@@ -561,7 +605,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 572,
+            "line": 607,
             "description": "Public method that renames a field in the specified timeseries",
             "itemtype": "method",
             "name": "renameField",
@@ -595,7 +639,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 634,
+            "line": 669,
             "description": "Public method that checks wheather the timestamps have ISO format.\nThe method checks only the config json, it does not verify the timestamps\nof all documents.",
             "itemtype": "method",
             "name": "isISO",
@@ -615,7 +659,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 667,
+            "line": 702,
             "description": "Public method that passes all the timestamps \nto the ISO format (YYYY-MM-DDTHH:mm:ss.SSSSZ).\nThe name of the timestamps is not changed.",
             "itemtype": "method",
             "name": "toISO",
@@ -634,7 +678,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 735,
+            "line": 770,
             "description": "Public method used to leave in the \ntimeseries only the documents between\ntwo dates specified in the date_borders array",
             "itemtype": "method",
             "name": "cut",
@@ -658,7 +702,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 808,
+            "line": 843,
             "description": "Public method used to merge two or more timeseries \ninto one timeseries. The timeseries should be homogeneous.\nThe result timeseries would have only one timestamp field \n(it's name is specified by TIMESTAMP_FIELD proprety).",
             "itemtype": "method",
             "name": "merge",
@@ -677,7 +721,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 889,
+            "line": 924,
             "description": "Public method that is used to reduce the number\nof documents in the timeseries by different\nmethods. Applied only if the timeseries are homogeneous.\nUses a tsreductions module.\nThe reduction mehtods are: \n- skip: choose one document from skipsize documents\n- sum: sum the values of skipsize documents into one\n- avg: average the values of skipsize documents into one\n- max: choose one document from skipsize documents with the maximum value of target_field\n- min: choose one document from skipsize documents with the minimum value of target_field",
             "itemtype": "method",
             "name": "undersample",
@@ -711,7 +755,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 974,
+            "line": 1009,
             "description": "Public mehtod that could be applied to two or more timeseries\nto interpolate the missing datapoints (document) in relation to \neach other.\nInterpolation methods are: linear, cubic, lanczos, and neares neighbor.\nMethods comparaison could be found <a href=\"http://osuushi.github.io/plotdemo016.html\">here</a>.\nTimestamps should be the ISO strings.\nUses a tsinterp module.",
             "itemtype": "method",
             "name": "interpolate",
@@ -735,7 +779,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 1114,
+            "line": 1149,
             "description": "Public mehtod that could be applied to two or more timeseries\nto simplify them and leave only the documents that have the same\ntimestamps.\nTimestamps should be the ISO strings.",
             "itemtype": "method",
             "name": "intersect",
@@ -754,7 +798,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 1197,
+            "line": 1232,
             "description": "Public method that is used to check the local similarity\nbetween the fields of a timeseries. Does this by caclulating\nthe local correlation.\nSo a timeseries should be merged (ie the function works with \nonly a single one timeseries) and have at least two non-timestamp fields.\n<br/>The similarity is indicated by adding a new field 'correlation' to each document.\nIf value of this field is not 'false', it means that a document is a part \nof range of documents that are strongly correlated.\nThe correlation is considered strong if correalation coef is > 0.6.\n<br/>More info about correlation can be found <a href=\"http://www.statisticshowto.com/what-is-the-correlation-coefficient-formula/\">here</a>.",
             "itemtype": "method",
             "name": "checkSimilarity",
@@ -773,7 +817,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 1319,
+            "line": 1354,
             "description": "Private function that merges the configuration of \nmultiple timeseries into one.\nThe final timestamp name is defined by the \nTIMESTAMP_FIELD propretie.",
             "itemtype": "method",
             "name": "mergeConfigs",
@@ -782,7 +826,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 1356,
+            "line": 1391,
             "description": "Private method that returns the minimal (the earliest)\ndate of all the timeseries.",
             "itemtype": "method",
             "name": "getMinDate",
@@ -795,7 +839,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 1380,
+            "line": 1415,
             "description": "Private method that returns the maximal (the oldest)\ndate of all the timeseries.",
             "itemtype": "method",
             "name": "getMaxDate",
@@ -808,7 +852,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 1404,
+            "line": 1439,
             "description": "Private method that cuts in a single timeseries all the documents\nthat are bellow the specified index.\nIndex is also cut.",
             "itemtype": "method",
             "name": "cutBellow",
@@ -829,7 +873,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 1417,
+            "line": 1452,
             "description": "Private method that cuts in a single timeseries all the documents\nthat are above the specified index.\nIndex is also cut.",
             "itemtype": "method",
             "name": "cutAbove",
@@ -850,7 +894,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 1430,
+            "line": 1465,
             "description": "Private method that cuts in all the \ntimeseries the documents that are earlier \nthan max_date.",
             "itemtype": "method",
             "name": "cutAboveMax",
@@ -866,7 +910,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 1483,
+            "line": 1518,
             "description": "Private method that cuts in all the \ntimeseries the documents that are older \nthan min_date.",
             "itemtype": "method",
             "name": "cutBellowMin",
@@ -882,7 +926,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 1537,
+            "line": 1572,
             "description": "Private method that returns an array\nof all the possible dates of all the timeseries (without duplication).\nThe timestamps of all the timeseries shoud be the ISO strings.\nFinal array of dates is sorted.",
             "itemtype": "method",
             "name": "getAllDates",
@@ -898,7 +942,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 1576,
+            "line": 1611,
             "description": "Private method that returns an array\nof dates that are included in all the timeseries.\nThe timestamps of all the timeseries shoud be the ISO strings.",
             "itemtype": "method",
             "name": "getSameDates",
@@ -914,7 +958,7 @@
         },
         {
             "file": "lib/tsproc.js",
-            "line": 1607,
+            "line": 1642,
             "description": "Private method that returns an array\nof all the dates present in a single timeseries.",
             "itemtype": "method",
             "name": "getTSDates",
