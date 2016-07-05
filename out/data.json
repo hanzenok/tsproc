@@ -230,7 +230,7 @@
         {
             "file": "lib/tsinterp.js",
             "line": 262,
-            "description": "A private method that exracts an array of values of all\nthe documents in a timeseries.</br>",
+            "description": "A private method that exracts an array of values of all\nthe documents in a timeseries.",
             "itemtype": "method",
             "name": "extractValues",
             "return": {
@@ -982,6 +982,81 @@
             },
             "example": [
                 "\n\t\n    //[[{a: 18.01, year:'2011-01-01T00:00:00.000Z'}, {a: 21.07, year:'2012-01-01T00:00:00.000Z'}], [{b: 21.42, year:'2012-01-01T00:00:00.000Z'}, {b: 23.11, year:'2013-01-01T00:00:00.000Z'}]]\n    console.log(getTSDates.call(this, 0)); //['2011-01-01T00:00:00.000Z', '2012-01-01T00:00:00.000Z']\n"
+            ],
+            "class": "tsproc",
+            "module": "tsproc"
+        },
+        {
+            "file": "lib/tsproc.js",
+            "line": 1680,
+            "description": "A private method that exracts an array of values of all\nthe documents in a timeseries.\n\nThe function works only with merged timeseries.",
+            "itemtype": "method",
+            "name": "extractValues",
+            "params": [
+                {
+                    "name": "borders",
+                    "description": "An array of indexes between which the values should be extracted",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "An array of values",
+                "type": "Array"
+            },
+            "example": [
+                "\n\t\n    //[{a: 18.01, year:'2011'}, {a: 21.07, year:'2012'}, {a: 23.23, year:'2013'}]\n    console.log(extractValues.call(this)); //[[18.01], [21.07], [23.23]]\n    console.log(extractValues.call(this, [1,2])); //[[21.07], [23.23]]\n"
+            ],
+            "class": "tsproc",
+            "module": "tsproc"
+        },
+        {
+            "file": "lib/tsproc.js",
+            "line": 1745,
+            "description": "A private method that calculates the correlation coefficient\nbetween two arrays of digits. \n\nUsing <a href=\"http://www.statisticshowto.com/what-is-the-correlation-coefficient-formula/\">this</a>\ncorrelation formula.",
+            "itemtype": "method",
+            "name": "getCorrelationCoef",
+            "params": [
+                {
+                    "name": "array1",
+                    "description": "First array of digits to count the correlation",
+                    "type": "Array"
+                },
+                {
+                    "name": "array2",
+                    "description": "Second arrya of digits to count the correlation",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "A correlation coefficient",
+                "type": "Flooat"
+            },
+            "example": [
+                "\n\t\n     console.log(getCorrelationCoef.call(this, [1, 2, 3, 4, 5, 6], [2, 2, 3, 4, 5, 60])); //0.69"
+            ],
+            "class": "tsproc",
+            "module": "tsproc"
+        },
+        {
+            "file": "lib/tsproc.js",
+            "line": 1799,
+            "description": "A private method that adds to the set of documents \n(specified by the 'borders') a field 'correlation' with value\n'corr_value' (cf example).\n\nIf no borders are specified, the field would be added\nto all of the documents of the timeseries.<br/>\nIf no correlation value is specified the 'false' would\nbe attributed.\n\nThe method works only with merged timeseries and only if \nthere are at least 2 non-timestamp fields.",
+            "itemtype": "method",
+            "name": "markCorrelation",
+            "params": [
+                {
+                    "name": "borders",
+                    "description": "An array of indexes between which the correlation should be marked",
+                    "type": "Array"
+                },
+                {
+                    "name": "corr_value",
+                    "description": "The correlation value to add",
+                    "type": "Float"
+                }
+            ],
+            "example": [
+                "\n\t\n    //[{a: 18.01, year:'2011'}, {a: 21.07, year:'2012'}, {a: 23.23, year:'2013'}]\n    markCorrelation.call(this, [1,2], 0.9); console.log(this.getTS()); //[{a: 18.01, year:'2011'}, {a: 21.07, year:'2012', correlation: 0.9}, {a: 23.23, year:'2013', correlation: 0.9}]\n    markCorrelation.call(this); console.log(this.getTS()); //[{a: 18.01, year:'2011', correlation: false}, {a: 21.07, year:'2012', correlation: false}, {a: 23.23, year:'2013', correlation: false}]"
             ],
             "class": "tsproc",
             "module": "tsproc"

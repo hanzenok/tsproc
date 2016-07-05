@@ -69,10 +69,12 @@
                             <li><a href="#methods_cutAboveMax">cutAboveMax</a></li>
                             <li><a href="#methods_cutBellow">cutBellow</a></li>
                             <li><a href="#methods_cutBellowMin">cutBellowMin</a></li>
+                            <li><a href="#methods_extractValues">extractValues</a></li>
                             <li><a href="#methods_getAllDates">getAllDates</a></li>
                             <li><a href="#methods_getAvgPerDay">getAvgPerDay</a></li>
                             <li><a href="#methods_getBorders">getBorders</a></li>
                             <li><a href="#methods_getConfig">getConfig</a></li>
+                            <li><a href="#methods_getCorrelationCoef">getCorrelationCoef</a></li>
                             <li><a href="#methods_getDocByTimestamp">getDocByTimestamp</a></li>
                             <li><a href="#methods_getEmptyDoc">getEmptyDoc</a></li>
                             <li><a href="#methods_getFields">getFields</a></li>
@@ -92,6 +94,7 @@
                             <li><a href="#methods_isHomogeneous">isHomogeneous</a></li>
                             <li><a href="#methods_isISO">isISO</a></li>
                             <li><a href="#methods_isValid">isValid</a></li>
+                            <li><a href="#methods_markCorrelation">markCorrelation</a></li>
                             <li><a href="#methods_merge">merge</a></li>
                             <li><a href="#methods_mergeConfigs">mergeConfigs</a></li>
                             <li><a href="#methods_process">process</a></li>
@@ -411,6 +414,35 @@ than min_date.</p>
         </li>
     </ul>
 </div>
+<a name="methods_extractValues"></a>
+<div class="method item">
+    Array <strong class="name"><code>extractValues</code></strong>( <code>borders </code> ) 
+    <br>
+    <span class="foundat">
+        
+        <a href="../files/lib_tsproc.js.html#l1680"><code>lib&#x2F;tsproc.js:1680</code></a>
+    </span><br>
+    <p>A private method that exracts an array of values of all
+the documents in a timeseries.</p>
+<p>The function works only with merged timeseries.</p>
+
+    <strong>Parameters:</strong>
+    <ul class="params">
+        <li>
+            <code>borders</code> <strong>&lt;Array&gt;</strong>
+        <p>An array of indexes between which the values should be extracted</p>
+
+        </li>
+    </ul>
+    <br><div class="returns"><strong>Returns:</strong> &lt;Array&gt; <p>An array of values</p>
+</div>
+        <h5>Example</h5>
+        <pre class="code prettyprint"><code>//[{a: 18.01, year:'2011'}, {a: 21.07, year:'2012'}, {a: 23.23, year:'2013'}]
+console.log(extractValues.call(this)); //[[18.01], [21.07], [23.23]]
+console.log(extractValues.call(this, [1,2])); //[[21.07], [23.23]]
+</code></pre>
+
+</div>
 <a name="methods_getAllDates"></a>
 <div class="method item">
     Array <strong class="name"><code>getAllDates</code></strong>( <code>  </code> ) 
@@ -473,6 +505,38 @@ from all the timeseries.</p>
 
     <br><div class="returns"><strong>Returns:</strong> &lt;Json&gt; <p>Timeseries description</p>
 </div>
+</div>
+<a name="methods_getCorrelationCoef"></a>
+<div class="method item">
+    Flooat <strong class="name"><code>getCorrelationCoef</code></strong>( <code>array1, array2 </code> ) 
+    <br>
+    <span class="foundat">
+        
+        <a href="../files/lib_tsproc.js.html#l1745"><code>lib&#x2F;tsproc.js:1745</code></a>
+    </span><br>
+    <p>A private method that calculates the correlation coefficient
+between two arrays of digits.</p>
+<p>Using <a href="http://www.statisticshowto.com/what-is-the-correlation-coefficient-formula/">this</a>
+correlation formula.</p>
+
+    <strong>Parameters:</strong>
+    <ul class="params">
+        <li>
+            <code>array1</code> <strong>&lt;Array&gt;</strong>
+        <p>First array of digits to count the correlation</p>
+
+        </li>
+        <li>
+            <code>array2</code> <strong>&lt;Array&gt;</strong>
+        <p>Second arrya of digits to count the correlation</p>
+
+        </li>
+    </ul>
+    <br><div class="returns"><strong>Returns:</strong> &lt;Flooat&gt; <p>A correlation coefficient</p>
+</div>
+        <h5>Example</h5>
+        <pre class="code prettyprint"><code> console.log(getCorrelationCoef.call(this, [1, 2, 3, 4, 5, 6], [2, 2, 3, 4, 5, 60])); //0.69</code></pre>
+
 </div>
 <a name="methods_getDocByTimestamp"></a>
 <div class="method item">
@@ -999,6 +1063,43 @@ timeseries is correct.</p>
 
     <br><div class="returns"><strong>Returns:</strong> &lt;Boolean&gt; <p>Wheather the date format is correct</p>
 </div>
+</div>
+<a name="methods_markCorrelation"></a>
+<div class="method item">
+     <strong class="name"><code>markCorrelation</code></strong>( <code>borders, corr_value </code> ) 
+    <br>
+    <span class="foundat">
+        
+        <a href="../files/lib_tsproc.js.html#l1799"><code>lib&#x2F;tsproc.js:1799</code></a>
+    </span><br>
+    <p>A private method that adds to the set of documents
+(specified by the 'borders') a field 'correlation' with value
+'corr_value' (cf example).</p>
+<p>If no borders are specified, the field would be added
+to all of the documents of the timeseries.<br/>
+If no correlation value is specified the 'false' would
+be attributed.</p>
+<p>The method works only with merged timeseries and only if
+there are at least 2 non-timestamp fields.</p>
+
+    <strong>Parameters:</strong>
+    <ul class="params">
+        <li>
+            <code>borders</code> <strong>&lt;Array&gt;</strong>
+        <p>An array of indexes between which the correlation should be marked</p>
+
+        </li>
+        <li>
+            <code>corr_value</code> <strong>&lt;Float&gt;</strong>
+        <p>The correlation value to add</p>
+
+        </li>
+    </ul>
+        <h5>Example</h5>
+        <pre class="code prettyprint"><code>//[{a: 18.01, year:'2011'}, {a: 21.07, year:'2012'}, {a: 23.23, year:'2013'}]
+markCorrelation.call(this, [1,2], 0.9); console.log(this.getTS()); //[{a: 18.01, year:'2011'}, {a: 21.07, year:'2012', correlation: 0.9}, {a: 23.23, year:'2013', correlation: 0.9}]
+markCorrelation.call(this); console.log(this.getTS()); //[{a: 18.01, year:'2011', correlation: false}, {a: 21.07, year:'2012', correlation: false}, {a: 23.23, year:'2013', correlation: false}]</code></pre>
+
 </div>
 <a name="methods_merge"></a>
 <div class="method item">

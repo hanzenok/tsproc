@@ -1755,9 +1755,22 @@ function getTSDates(ts_index){
 	return dates_array;
 }
 
-//[{a:2, b:5, time:1911}, {a:3, b:4, time:1912}, {a:4, b:6, time:1913}] ==&gt; extractValues() ==&gt; [[2, 3, 4], [5, 4, 6]]
-//[{a:2, b:5, time:1911}, {a:3, b:4, time:1912}, {a:4, b:6, time:1913}] ==&gt; extractValues([1, 2]) ==&gt; [[3, 4], [4, 6]]
-//works only with merged timeseries i.e. when (this.getNbTS() === 1)
+/**
+ * A private method that exracts an array of values of all
+ * the documents in a timeseries.
+ *
+ * The function works only with merged timeseries.
+ * @method extractValues
+ * @param {array} borders An array of indexes between which the values should be extracted
+ * @return {array} An array of values
+ * 
+ * @example
+ *	
+ *     //[{a: 18.01, year:&#x27;2011&#x27;}, {a: 21.07, year:&#x27;2012&#x27;}, {a: 23.23, year:&#x27;2013&#x27;}]
+ *     console.log(extractValues.call(this)); //[[18.01], [21.07], [23.23]]
+ *     console.log(extractValues.call(this, [1,2])); //[[21.07], [23.23]]
+ *
+ */
 function extractValues(borders){
 
 	var values;
@@ -1807,8 +1820,22 @@ function extractValues(borders){
 	return values;
 }
 
-//getCorrelationCoef([1, 2, 3, 4, 5, 6], [2, 2, 3, 4, 5, 60]) ==&gt; 0.69
-//http://www.statisticshowto.com/what-is-the-correlation-coefficient-formula/
+/**
+ * A private method that calculates the correlation coefficient
+ * between two arrays of digits. 
+ *
+ * Using &lt;a href=&quot;http://www.statisticshowto.com/what-is-the-correlation-coefficient-formula/&quot;&gt;this&lt;/a&gt;
+ * correlation formula.
+ *
+ * @method getCorrelationCoef
+ * @param {array} array1 First array of digits to count the correlation
+ * @param {array} array2 Second arrya of digits to count the correlation
+ * @return {flooat} A correlation coefficient
+ * 
+ * @example
+ *	
+ *      console.log(getCorrelationCoef.call(this, [1, 2, 3, 4, 5, 6], [2, 2, 3, 4, 5, 60])); //0.69
+ */
 function getCorrelationCoef(array1, array2){
 
 	var coef = null;
@@ -1847,6 +1874,29 @@ function getCorrelationCoef(array1, array2){
 
 //mark the value of correlation corr_value
 //to every document in the range
+/**
+ * A private method that adds to the set of documents 
+ * (specified by the &#x27;borders&#x27;) a field &#x27;correlation&#x27; with value
+ * &#x27;corr_value&#x27; (cf example).
+ *
+ * If no borders are specified, the field would be added
+ * to all of the documents of the timeseries.&lt;br/&gt;
+ * If no correlation value is specified the &#x27;false&#x27; would
+ * be attributed.
+ *
+ * The method works only with merged timeseries and only if 
+ * there are at least 2 non-timestamp fields.
+ *
+ * @method markCorrelation
+ * @param {array} borders An array of indexes between which the correlation should be marked
+ * @param {float} corr_value The correlation value to add
+ * 
+ * @example
+ *	
+ *     //[{a: 18.01, year:&#x27;2011&#x27;}, {a: 21.07, year:&#x27;2012&#x27;}, {a: 23.23, year:&#x27;2013&#x27;}]
+ *     markCorrelation.call(this, [1,2], 0.9); console.log(this.getTS()); //[{a: 18.01, year:&#x27;2011&#x27;}, {a: 21.07, year:&#x27;2012&#x27;, correlation: 0.9}, {a: 23.23, year:&#x27;2013&#x27;, correlation: 0.9}]
+ *     markCorrelation.call(this); console.log(this.getTS()); //[{a: 18.01, year:&#x27;2011&#x27;, correlation: false}, {a: 21.07, year:&#x27;2012&#x27;, correlation: false}, {a: 23.23, year:&#x27;2013&#x27;, correlation: false}]
+ */
 function markCorrelation(borders, corr_value){
 
 	//working only with a merged timeseries 
