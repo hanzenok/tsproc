@@ -5,6 +5,6 @@
     "url": "http://www.maya-technologies.com/en/",
     "themedir": "/usr/local/lib/node_modules/yuidocjs/themes/maya",
     "options": {
-        "outdir": "./out"
+        "outdir": "./doc"
     }
 }
