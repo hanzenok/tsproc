@@ -47,16 +47,6 @@
                 </div>
             </div>
             
-            <div id="elements" class="sidebox">
-                <div class="hd">
-                    <h2 class="no-toc">Elements</h2>
-                </div>
-                <div class="bd">
-                    <ul>
-                    </ul>
-                </div>
-            </div>
-            
             
             
             
@@ -97,15 +87,14 @@ var INTERP_METHODS = [&#x27;linear&#x27;, &#x27;cubic&#x27;, &#x27;lanczos&#x27;
  * documents in the timeseries by interpolation.
 
  * Two public methods:&lt;br/&gt;
- * a constructor &#x27;tsinterp&#x27; that learns all the  documents of a timeseries
- * and a method &#x27;smooth&#x27; that takes as parameter a date
+ * - a constructor &lt;a href=&quot;#methods_tsinterp&quot;&gt;tsinterp()&lt;/a&gt; that learns all the  documents of a timeseries &lt;br/&gt;
+ * - a method &lt;a href=&quot;#methods_smooth&quot;&gt;smooth()&lt;/a&gt; that takes as parameter a date
  * (string with ISO format) and returns associated document with
- * interpolated values.
+ * interpolated values
  *
- * Completely independent from tsproc module, so should be used as a normal Node.js module.
+ * Completely independent from &lt;b&gt;tsproc&lt;/b&gt; module, so should be used as a normal Node.js module.
  *
- * Based on the &lt;a href=&#x27;https://github.com/osuushi/Smooth.js/&#x27;&gt;Smooth.js&lt;/a&gt;
- * module.
+ * Based on the &lt;a href=&#x27;https://github.com/osuushi/Smooth.js/&#x27;&gt;Smooth.js&lt;/a&gt;.
  *
  * @class tsinterp
  * @constructor
@@ -289,6 +278,7 @@ tsinterp.prototype.smooth = function(date, callback){
  * given values.
  *
  * @method createDoc
+ * @private
  * @for tsinterp
  * @param {string} time An ISO string representing the date
  * @param {array} values An array of values of document fields
@@ -315,6 +305,7 @@ function createDoc(time, values){
  * in a timeseries.
  *
  * @method extractDates
+ * @private
  * @for tsinterp
  * @return {array} An array of moment.js dates
  *
@@ -342,6 +333,7 @@ function extractDates(){
  * the documents in a timeseries.
  *
  * @method extractValues
+ * @private
  * @for tsinterp
  * @return {array} An array of values
  *
@@ -378,6 +370,7 @@ function extractValues(){
  * of each document of the timeseries.
  *
  * @method learn
+ * @private
  * @for tsinterp
  * @param {function} callback An error callback
  */

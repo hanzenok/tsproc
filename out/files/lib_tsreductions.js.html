@@ -47,16 +47,6 @@
                 </div>
             </div>
             
-            <div id="elements" class="sidebox">
-                <div class="hd">
-                    <h2 class="no-toc">Elements</h2>
-                </div>
-                <div class="bd">
-                    <ul>
-                    </ul>
-                </div>
-            </div>
-            
             
             
             
@@ -82,10 +72,10 @@
 
 /**
  * Class contaning the size reduction functions
- * used by the tsproc class.
+ * used by the &lt;b&gt;tsproc&lt;/b&gt; class.
  * 
  * These functions have access to the internal
- * methods of tsproc, so from within the tsproc, they should
+ * methods of &lt;b&gt;tsproc&lt;/b&gt;, so from within the &lt;b&gt;tsproc&lt;/b&gt;, they should
  * be called using the &lt;a href=&quot;https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Function/call&quot;&gt;call(this, ..)&lt;/a&gt;
  * method.
  * 
@@ -242,7 +232,7 @@ function reduceAvg(skipsize){
 
 /**
  * Reduction of the timeseries size by finding the document with
- * the max value of &#x27;target_field&#x27; between a set of documents.
+ * the max value of &lt;code&gt;target_field&lt;/code&gt; between a set of documents.
  *
  * @method reduceMax
  * @for tsreductions
@@ -294,7 +284,7 @@ function reduceMax(skipsize, target_field){
 
 /**
  * Reduction of the timeseries size by finding the document with
- * the min value of &#x27;target_field&#x27; between a set of documents.
+ * the min value of &lt;code&gt;target_field&lt;/code&gt; between a set of documents.
  *
  * @method reduceMin
  * @for tsreductions
