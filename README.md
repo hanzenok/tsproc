@@ -36,3 +36,5 @@ var tsproc = require('tsproc');
 ## Authors
 
 Developped by [Ganza Mykhailo](mailto:hanzenok@gmail.com) with supervision of [François Naçabal](mailto:francois.nacabal@maya-technologies.com) at [Maya Technologies](http://www.maya-technologies.com/en/).
+
+[Documentation](tsproc/doc/index.html)
