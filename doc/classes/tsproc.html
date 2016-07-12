@@ -83,6 +83,7 @@
                             <li><a href="#methods_intersect">intersect</a></li>
                             <li><a href="#methods_isHomogeneous">isHomogeneous</a></li>
                             <li><a href="#methods_isISO">isISO</a></li>
+                            <li><a href="#methods_isUNIX">isUNIX</a></li>
                             <li><a href="#methods_isValid">isValid</a></li>
                             <li><a href="#methods_markCorrelation">markCorrelation</a></li>
                             <li><a href="#methods_merge">merge</a></li>
@@ -111,7 +112,7 @@
 
         <div id="main" class="yui3-u">
             <div class="content"><h4>Class tsproc</h4>
-<span class="foundat">Class defined in: <a href="../files/lib_tsproc.js.html#l53"><code>lib&#x2F;tsproc.js:53</code></a></span>
+<span class="foundat">Class defined in: <a href="../files/lib_tsproc.js.html#l60"><code>lib&#x2F;tsproc.js:60</code></a></span>
 <div class="intro"><p>TimeSeries Processor (tsproc) is a module that
 takes in one or multiple timeseries whis
 their configuration (cf <a href="#methods_tsproc">constructor</a>) and offers
@@ -140,7 +141,7 @@ in order to pass erros and return modified timeseries.</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l53"><code>lib&#x2F;tsproc.js:53</code></a>
+        <a href="../files/lib_tsproc.js.html#l60"><code>lib&#x2F;tsproc.js:60</code></a>
     </span><br>
     
     <strong>Parameters:</strong>
@@ -217,7 +218,7 @@ var tsp = new tsproc(ts, config, null);</code></pre>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l1284"><code>lib&#x2F;tsproc.js:1284</code></a>
+        <a href="../files/lib_tsproc.js.html#l1299"><code>lib&#x2F;tsproc.js:1299</code></a>
     </span><br>
     <p>Public method that checks the local similarity
 between the fields of a timeseries. Does this by caclulating
@@ -278,7 +279,7 @@ tsp.checkSimilarity(function(err, timeseries){
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l814"><code>lib&#x2F;tsproc.js:814</code></a>
+        <a href="../files/lib_tsproc.js.html#l829"><code>lib&#x2F;tsproc.js:829</code></a>
     </span><br>
     <p>Public method that leaves in the
 timeseries only the documents between
@@ -333,7 +334,7 @@ tsp.cut(['2012-01-01T00:00:00.000Z', '2013-01-01T00:00:00.000Z'], function(err, 
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l1519"><code>lib&#x2F;tsproc.js:1519</code></a>
+        <a href="../files/lib_tsproc.js.html#l1534"><code>lib&#x2F;tsproc.js:1534</code></a>
     </span><br>
     <p>Private method that cuts in a specified timeseries all the documents
 that are above the specified index.
@@ -359,7 +360,7 @@ Index is included in a cut.</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l1534"><code>lib&#x2F;tsproc.js:1534</code></a>
+        <a href="../files/lib_tsproc.js.html#l1549"><code>lib&#x2F;tsproc.js:1549</code></a>
     </span><br>
     <p>Private method that cuts in all the
 timeseries the documents that are earlier
@@ -380,7 +381,7 @@ than <code>max_date</code>.</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l1504"><code>lib&#x2F;tsproc.js:1504</code></a>
+        <a href="../files/lib_tsproc.js.html#l1519"><code>lib&#x2F;tsproc.js:1519</code></a>
     </span><br>
     <p>Private method that cuts in a specified timeseries all the documents
 that are bellow the specified index.
@@ -406,7 +407,7 @@ Index is included in a cut.</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l1589"><code>lib&#x2F;tsproc.js:1589</code></a>
+        <a href="../files/lib_tsproc.js.html#l1604"><code>lib&#x2F;tsproc.js:1604</code></a>
     </span><br>
     <p>Private method that cuts in all the
 timeseries the documents that are older
@@ -427,7 +428,7 @@ than <code>min_date</code>.</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l1750"><code>lib&#x2F;tsproc.js:1750</code></a>
+        <a href="../files/lib_tsproc.js.html#l1765"><code>lib&#x2F;tsproc.js:1765</code></a>
     </span><br>
     <p>A private method that exracts an array of values of all
 the documents in a timeseries.</p>
@@ -456,7 +457,7 @@ console.log(extractValues.call(this, [1,2])); //[[21.07], [23.23]]
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l1645"><code>lib&#x2F;tsproc.js:1645</code></a>
+        <a href="../files/lib_tsproc.js.html#l1660"><code>lib&#x2F;tsproc.js:1660</code></a>
     </span><br>
     <p>Private method that returns an array
 of all the possible dates of all the timeseries (without duplication).</p>
@@ -477,7 +478,7 @@ console.log(getAllDates.call(this)); //['2011-01-01T00:00:00.000Z', '2012-01-01T
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l482"><code>lib&#x2F;tsproc.js:482</code></a>
+        <a href="../files/lib_tsproc.js.html#l489"><code>lib&#x2F;tsproc.js:489</code></a>
     </span><br>
     <p>Public method that returns an average number of timestamps per day.
 The timeseries should be merged.</p>
@@ -491,7 +492,7 @@ The timeseries should be merged.</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l511"><code>lib&#x2F;tsproc.js:511</code></a>
+        <a href="../files/lib_tsproc.js.html#l518"><code>lib&#x2F;tsproc.js:518</code></a>
     </span><br>
     <p>Public method that returns the date borders, which corresponds
 to the earliest timestamp from all the timseries and the oldest timestamp
@@ -506,7 +507,7 @@ from all the timeseries.</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l294"><code>lib&#x2F;tsproc.js:294</code></a>
+        <a href="../files/lib_tsproc.js.html#l301"><code>lib&#x2F;tsproc.js:301</code></a>
     </span><br>
     <p>Public method that returns a timeseries config json.</p>
 
@@ -519,7 +520,7 @@ from all the timeseries.</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l1817"><code>lib&#x2F;tsproc.js:1817</code></a>
+        <a href="../files/lib_tsproc.js.html#l1832"><code>lib&#x2F;tsproc.js:1832</code></a>
     </span><br>
     <p>A private method that calculates the correlation coefficient
 between two arrays of digits.</p>
@@ -551,7 +552,7 @@ correlation formula.</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l378"><code>lib&#x2F;tsproc.js:378</code></a>
+        <a href="../files/lib_tsproc.js.html#l385"><code>lib&#x2F;tsproc.js:385</code></a>
     </span><br>
     <p>Public method that returns a single document from the timeseries.</p>
 
@@ -577,7 +578,7 @@ correlation formula.</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l419"><code>lib&#x2F;tsproc.js:419</code></a>
+        <a href="../files/lib_tsproc.js.html#l426"><code>lib&#x2F;tsproc.js:426</code></a>
     </span><br>
     <p>Public method that takes a timestamp and returns (via <code>callback</code>)
 a document from the timeseries that corresponds to it.</p>
@@ -607,7 +608,7 @@ a document from the timeseries that corresponds to it.</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l391"><code>lib&#x2F;tsproc.js:391</code></a>
+        <a href="../files/lib_tsproc.js.html#l398"><code>lib&#x2F;tsproc.js:398</code></a>
     </span><br>
     <p>Public method that returns an empty document.
 It is generated from a normal document (specified
@@ -637,7 +638,7 @@ except the timestamp.</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l461"><code>lib&#x2F;tsproc.js:461</code></a>
+        <a href="../files/lib_tsproc.js.html#l468"><code>lib&#x2F;tsproc.js:468</code></a>
     </span><br>
     <p>Public method that returns an array of fields present
 in the specified timeseries (ie in each of it's documents).</p>
@@ -659,7 +660,7 @@ in the specified timeseries (ie in each of it's documents).</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l1478"><code>lib&#x2F;tsproc.js:1478</code></a>
+        <a href="../files/lib_tsproc.js.html#l1493"><code>lib&#x2F;tsproc.js:1493</code></a>
     </span><br>
     <p>Private method that returns the maximal (the oldest)
 date of all the timeseries.</p>
@@ -673,7 +674,7 @@ date of all the timeseries.</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l1452"><code>lib&#x2F;tsproc.js:1452</code></a>
+        <a href="../files/lib_tsproc.js.html#l1467"><code>lib&#x2F;tsproc.js:1467</code></a>
     </span><br>
     <p>Private method that returns the minimal (the earliest)
 date of all the timeseries.</p>
@@ -687,7 +688,7 @@ date of all the timeseries.</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l305"><code>lib&#x2F;tsproc.js:305</code></a>
+        <a href="../files/lib_tsproc.js.html#l312"><code>lib&#x2F;tsproc.js:312</code></a>
     </span><br>
     <p>Public method that returns the current number of timeseries in
 the tsproc module.</p>
@@ -701,7 +702,7 @@ the tsproc module.</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l1687"><code>lib&#x2F;tsproc.js:1687</code></a>
+        <a href="../files/lib_tsproc.js.html#l1702"><code>lib&#x2F;tsproc.js:1702</code></a>
     </span><br>
     <p>Private method that returns an array
 of dates that are part of all the timeseries.</p>
@@ -721,7 +722,7 @@ console.log(getSameDates.call(this)); //['2012-01-01T00:00:00.000Z']
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l333"><code>lib&#x2F;tsproc.js:333</code></a>
+        <a href="../files/lib_tsproc.js.html#l340"><code>lib&#x2F;tsproc.js:340</code></a>
     </span><br>
     <p>Public method that returns the timestamp value (moment.js) of a specified document.</p>
 
@@ -747,7 +748,7 @@ console.log(getSameDates.call(this)); //['2012-01-01T00:00:00.000Z']
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l354"><code>lib&#x2F;tsproc.js:354</code></a>
+        <a href="../files/lib_tsproc.js.html#l361"><code>lib&#x2F;tsproc.js:361</code></a>
     </span><br>
     <p>Public method that returns the name of timestamp field of specified timeseries.</p>
 
@@ -768,7 +769,7 @@ console.log(getSameDates.call(this)); //['2012-01-01T00:00:00.000Z']
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l366"><code>lib&#x2F;tsproc.js:366</code></a>
+        <a href="../files/lib_tsproc.js.html#l373"><code>lib&#x2F;tsproc.js:373</code></a>
     </span><br>
     <p>Public method that returns a format of timestamp field of specified timeseries.</p>
 
@@ -789,7 +790,7 @@ console.log(getSameDates.call(this)); //['2012-01-01T00:00:00.000Z']
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l269"><code>lib&#x2F;tsproc.js:269</code></a>
+        <a href="../files/lib_tsproc.js.html#l276"><code>lib&#x2F;tsproc.js:276</code></a>
     </span><br>
     <p>Public method that returns (directly or via <code>callback</code>)
 a single timeseries if there is only one (if
@@ -813,7 +814,7 @@ or an array of timeseries if trere are many.</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l1721"><code>lib&#x2F;tsproc.js:1721</code></a>
+        <a href="../files/lib_tsproc.js.html#l1736"><code>lib&#x2F;tsproc.js:1736</code></a>
     </span><br>
     <p>Private method that returns an array
 of all the dates present in a specified timeseries.</p>
@@ -840,7 +841,7 @@ console.log(getTSDates.call(this, 0)); //['2011-01-01T00:00:00.000Z', '2012-01-0
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l317"><code>lib&#x2F;tsproc.js:317</code></a>
+        <a href="../files/lib_tsproc.js.html#l324"><code>lib&#x2F;tsproc.js:324</code></a>
     </span><br>
     <p>Public method that returns the number of documents in specified timeseries.
 If there is no timeseries specified, returns the size of the first one.</p>
@@ -862,7 +863,7 @@ If there is no timeseries specified, returns the size of the first one.</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l1056"><code>lib&#x2F;tsproc.js:1056</code></a>
+        <a href="../files/lib_tsproc.js.html#l1071"><code>lib&#x2F;tsproc.js:1071</code></a>
     </span><br>
     <p>Public mehtod that could be applied for two or more timeseries
 to interpolate the missing datapoints (documents) in relation to
@@ -950,7 +951,7 @@ tsp.interpolate(1, function(err, timeseries){
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l1199"><code>lib&#x2F;tsproc.js:1199</code></a>
+        <a href="../files/lib_tsproc.js.html#l1214"><code>lib&#x2F;tsproc.js:1214</code></a>
     </span><br>
     <p>Public mehtod that could be applied for two or more timeseries
 to simplify them and leave only the documents that have the same
@@ -1004,7 +1005,7 @@ tsp.intersect(function(err, timeseries){
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l527"><code>lib&#x2F;tsproc.js:527</code></a>
+        <a href="../files/lib_tsproc.js.html#l534"><code>lib&#x2F;tsproc.js:534</code></a>
     </span><br>
     <p>Public method that verifies wheather the timeseries is homogeneous.</p>
 <p>If there is only one timeseries, it is considered homogeneous.
@@ -1041,10 +1042,10 @@ console.log(tsp.isHomogeneous()); //false</code></pre>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l688"><code>lib&#x2F;tsproc.js:688</code></a>
+        <a href="../files/lib_tsproc.js.html#l695"><code>lib&#x2F;tsproc.js:695</code></a>
     </span><br>
     <p>Public method that checks wheather the timestamps have ISO format.
-The method checks only the config json, it does not verify the timestamps
+The method checks only the format written in config json, it does not verify the timestamps
 of all the documents.</p>
 
     <strong>Parameters:</strong>
@@ -1058,13 +1059,36 @@ of all the documents.</p>
     <br><div class="returns"><strong>Returns:</strong> &lt;Boolean&gt; <p>Wheather the timestamps have the ISO format</p>
 </div>
 </div>
+<a name="methods_isUNIX"></a>
+<div class="method item">
+    Boolean <strong class="name"><code>isUNIX</code></strong>( <code>ts_index </code> ) 
+    <br>
+    <span class="foundat">
+        
+        <a href="../files/lib_tsproc.js.html#l728"><code>lib&#x2F;tsproc.js:728</code></a>
+    </span><br>
+    <p>Public method that checks wheather the timestamps have UNIX format.
+The method checks only the format written in config json, it does not verify the timestamps
+of all the documents.</p>
+
+    <strong>Parameters:</strong>
+    <ul class="params">
+        <li>
+            <code>ts_index</code> <strong>&lt;Int&gt;</strong>
+        <p>The index of timeseries</p>
+
+        </li>
+    </ul>
+    <br><div class="returns"><strong>Returns:</strong> &lt;Boolean&gt; <p>Wheather the timestamps are unix timestamps</p>
+</div>
+</div>
 <a name="methods_isValid"></a>
 <div class="method item">
     Boolean <strong class="name"><code>isValid</code></strong>( <code>  </code> ) 
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l600"><code>lib&#x2F;tsproc.js:600</code></a>
+        <a href="../files/lib_tsproc.js.html#l607"><code>lib&#x2F;tsproc.js:607</code></a>
     </span><br>
     <p>Public method that checks wheather the format of the timestamps in each
 timeseries is correct.</p>
@@ -1078,7 +1102,7 @@ timeseries is correct.</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l1872"><code>lib&#x2F;tsproc.js:1872</code></a>
+        <a href="../files/lib_tsproc.js.html#l1887"><code>lib&#x2F;tsproc.js:1887</code></a>
     </span><br>
     <p>A private method that adds to the set of documents
 (specified by the <code>borders</code>) a field 'correlation' with value
@@ -1118,7 +1142,7 @@ markCorrelation.call(this); console.log(this.getTS()); //[{a: 18.01, year:'2011'
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l887"><code>lib&#x2F;tsproc.js:887</code></a>
+        <a href="../files/lib_tsproc.js.html#l902"><code>lib&#x2F;tsproc.js:902</code></a>
     </span><br>
     <p>Public method that merges two or more timeseries
 into one timeseries. The timeseries should be homogeneous.</p>
@@ -1162,7 +1186,7 @@ tsp.merge(function(err, timeseries){
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l1413"><code>lib&#x2F;tsproc.js:1413</code></a>
+        <a href="../files/lib_tsproc.js.html#l1428"><code>lib&#x2F;tsproc.js:1428</code></a>
     </span><br>
     <p>Private method that merges the configuration of
 multiple timeseries into one.
@@ -1176,7 +1200,7 @@ TIMESTAMP_FIELD proprety.</p>
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l177"><code>lib&#x2F;tsproc.js:177</code></a>
+        <a href="../files/lib_tsproc.js.html#l184"><code>lib&#x2F;tsproc.js:184</code></a>
     </span><br>
     <p>A main public method that processes a set of timeseries. It returns (via <code>callback</code>) a single timeseries with timestamp 'time' with
 ISO format.</p>
@@ -1228,7 +1252,7 @@ tsp.process(function(err, timeseries){
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l626"><code>lib&#x2F;tsproc.js:626</code></a>
+        <a href="../files/lib_tsproc.js.html#l633"><code>lib&#x2F;tsproc.js:633</code></a>
     </span><br>
     <p>Public method that renames a field in the specified timeseries.</p>
 
@@ -1290,7 +1314,7 @@ tsp.renameField(0, 'a', 'new_a', function(err, timeseries){
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l746"><code>lib&#x2F;tsproc.js:746</code></a>
+        <a href="../files/lib_tsproc.js.html#l761"><code>lib&#x2F;tsproc.js:761</code></a>
     </span><br>
     <p>Public method that passes all the timestamps
 to the ISO format (YYYY-MM-DDTHH:mm:ss.SSSSZ).
@@ -1339,7 +1363,7 @@ tsp.toISO(function(err, timeseries){
     <br>
     <span class="foundat">
         
-        <a href="../files/lib_tsproc.js.html#l969"><code>lib&#x2F;tsproc.js:969</code></a>
+        <a href="../files/lib_tsproc.js.html#l984"><code>lib&#x2F;tsproc.js:984</code></a>
     </span><br>
     <p>Public method that reduces the number
 of documents in the timeseries by different
@@ -1429,7 +1453,7 @@ tsp.undersample(3, 2, 'a', function(err, timeseries){
 <a name="props_InterpEnum"></a>
 <div class="props item">
     <code>InterpEnum</code> &lt;<strong>Json</strong>&gt;<br>
-    <span class="foundat"><a href="../files/lib_tsproc.js.html#l29"><code>lib&#x2F;tsproc.js:29</code></a></span>
+    <span class="foundat"><a href="../files/lib_tsproc.js.html#l36"><code>lib&#x2F;tsproc.js:36</code></a></span>
     <p>A description of interpolation
 methods offered by the <b>tsinterp</b> class.</p>
 
@@ -1445,7 +1469,7 @@ the format of ISO date.</p>
 <a name="props_ReduceEnum"></a>
 <div class="props item">
     <code>ReduceEnum</code> &lt;<strong>Json</strong>&gt;<br>
-    <span class="foundat"><a href="../files/lib_tsproc.js.html#l37"><code>lib&#x2F;tsproc.js:37</code></a></span>
+    <span class="foundat"><a href="../files/lib_tsproc.js.html#l44"><code>lib&#x2F;tsproc.js:44</code></a></span>
     <p>A description of timeseries size
 reduction methods offered by the <b>tsreductions</b> class.</p>
 
@@ -1453,7 +1477,7 @@ reduction methods offered by the <b>tsreductions</b> class.</p>
 <a name="props_ReduceFunc"></a>
 <div class="props item">
     <code>ReduceFunc</code> &lt;<strong>Array</strong>&gt;<br>
-    <span class="foundat"><a href="../files/lib_tsproc.js.html#l45"><code>lib&#x2F;tsproc.js:45</code></a></span>
+    <span class="foundat"><a href="../files/lib_tsproc.js.html#l52"><code>lib&#x2F;tsproc.js:52</code></a></span>
     <p>An array of timeseries size
 reduction functions.</p>
 
@@ -1461,10 +1485,19 @@ reduction functions.</p>
 <a name="props_TIMESTAMP_FIELD"></a>
 <div class="props item">
     <code>TIMESTAMP_FIELD</code> &lt;<strong>String</strong>&gt;<br>
-    <span class="foundat"><a href="../files/lib_tsproc.js.html#l20"><code>lib&#x2F;tsproc.js:20</code></a></span>
+    <span class="foundat"><a href="../files/lib_tsproc.js.html#l27"><code>lib&#x2F;tsproc.js:27</code></a></span>
     <p>A constant that holds the name
 of the timestamp field that would be generated
 after the merge (cf merge() and process() functions).</p>
+
+</div>
+<a name="props_UNIX_FORMAT"></a>
+<div class="props item">
+    <code>UNIX_FORMAT</code> &lt;<strong>String</strong>&gt;<br>
+    <span class="foundat"><a href="../files/lib_tsproc.js.html#l18"><code>lib&#x2F;tsproc.js:18</code></a></span>
+    <p>A constant that describes
+when the timestamp format is a unix
+timestamp.</p>
 
 </div>
             </div>
