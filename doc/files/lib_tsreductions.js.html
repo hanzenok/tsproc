@@ -88,7 +88,6 @@
  * (allways the first one) from the set of documents.
  *
  * @method reduceSkip
- * @for tsreductions
  * @param {int} skipsize A number of documents to choose from
  * @return {timeseries} Size reduced timeseries
  * @example
@@ -124,7 +123,6 @@ function reduceSkip(skipsize){
  * fields in a set of documents.
  *
  * @method reduceSum
- * @for tsreductions
  * @param {int} skipsize A number of documents to
  * be reduced into one by summing
  * @return {timeseries} Size reduced timeseries
@@ -177,7 +175,6 @@ function reduceSum(skipsize){
  * fields in a set of documents.
  *
  * @method reduceAvg
- * @for tsreductions
  * @param {int} skipsize A number of documents to
  * be reduced into one by averaging
  * @return {timeseries} Size reduced timeseries
@@ -235,7 +232,6 @@ function reduceAvg(skipsize){
  * the max value of &lt;code&gt;target_field&lt;/code&gt; between a set of documents.
  *
  * @method reduceMax
- * @for tsreductions
  * @param {int} skipsize A number of documents to be reduced into one by finding the max
  * @param {string} target_field A field by which all the documents are compared
  * to calculate the max
@@ -287,7 +283,6 @@ function reduceMax(skipsize, target_field){
  * the min value of &lt;code&gt;target_field&lt;/code&gt; between a set of documents.
  *
  * @method reduceMin
- * @for tsreductions
  * @param {int} skipsize A number of documents to be reduced into one by finding the min
  * @param {string} target_field A field by which all the documents are compared
  * to calculate the min

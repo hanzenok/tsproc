@@ -75,7 +75,6 @@ var smooth = require(&#x27;./smooth&#x27;);
 
 /**
  * @property INTERP_METHODS
- * @for tsinterp
  * @type array
  * @description Description of interpolation methods.
  * Methods comparation could be found &lt;a href=&quot;http://osuushi.github.io/plotdemo016.html&quot;&gt;here&lt;/a&gt;.
@@ -99,7 +98,6 @@ var INTERP_METHODS = [&#x27;linear&#x27;, &#x27;cubic&#x27;, &#x27;lanczos&#x27;
  * @class tsinterp
  * @constructor
  *
- * @for tsinterp
  * @param {array} timeseries A timeseries to learn. An array of JSONs
  * @param {json} description A description of fields and timestamps (with their format) of the each timeseries
  * @param {function} callback An error callback
@@ -178,7 +176,6 @@ function tsinterp(timeseries, description, callback){
  * the interpolated document with given date.
  *
  * @method smooth
- * @for tsinterp
  * @param {string} date A date from which to interpolate (ISO string)
  * @param {function} callback A callback function
  * @example
@@ -279,7 +276,6 @@ tsinterp.prototype.smooth = function(date, callback){
  *
  * @method createDoc
  * @private
- * @for tsinterp
  * @param {string} time An ISO string representing the date
  * @param {array} values An array of values of document fields
  * @return {json} Generated document
@@ -306,7 +302,6 @@ function createDoc(time, values){
  *
  * @method extractDates
  * @private
- * @for tsinterp
  * @return {array} An array of moment.js dates
  *
  * @example
@@ -334,7 +329,6 @@ function extractDates(){
  *
  * @method extractValues
  * @private
- * @for tsinterp
  * @return {array} An array of values
  *
  * @example
@@ -371,7 +365,6 @@ function extractValues(){
  *
  * @method learn
  * @private
- * @for tsinterp
  * @param {function} callback An error callback
  */
 function learn(callback){
