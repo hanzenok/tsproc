@@ -117,6 +117,8 @@ var InterpEnum = {&#x27;linear&#x27;: 0, &#x27;cubic&#x27;: 1, &#x27;lanczos&#x2
  */
 var ReduceEnum = {&#x27;skip&#x27;: 0, &#x27;sum&#x27;: 1, &#x27;avg&#x27;: 2, &#x27;max&#x27;: 3, &#x27;min&#x27;: 4};
 
+var QuantTSEnum = {none: &#x27;none&#x27;, day: &#x27;day&#x27;, month: &#x27;month&#x27;, year: &#x27;year&#x27;};
+
 /**
  * @property ReduceFunc
  * @type array
@@ -187,7 +189,7 @@ var ReduceFunc = tsreductions;
  * 
  *     var ts = [
  *     		[{a: 18.11, year:&#x27;2011&#x27;}, {a: 21.07, year:&#x27;2012&#x27;}],
- *    		    [{b: 26.42, year:&#x27;2012&#x27;}, {b: 21.07, year:&#x27;2013&#x27;}]
+ *    		    [{b: 26.42, year:&#x27;2012&#x27;}, {b: 24.11, year:&#x27;2013&#x27;}]
  *          ]
  *     
  *     var tsp = new tsproc(ts, config, null);
@@ -330,6 +332,9 @@ tsproc.prototype.process = function(callback){
 		//reduction
 		this.undersample(ReduceEnum[this._reduction_type], this._reduction_size, this._reduction_target_field, err_callback);
 
+		//quantification
+		this.quantize(err_callback);
+
 		//callback the data
 		if (callback)
 			callback(null, this.getTS());
@@ -367,14 +372,24 @@ tsproc.prototype.getTS = function(callback){
 }
 
 /**
- * Public method that returns a timeseries config json.
+ * Public method that returns (directly or via &lt;code&gt;callback&lt;/code&gt;) 
+ * a timeseries config json.
+ * Note: for now, it returns only the timeseries config
+ * of the tsproc (not the options like transform type,
+ * data borders, correlaiton, etc).
  *
  * @method getConfig
+ * @param  {function} callback Callback function
  * @return {json} Timeseries description
  */
-tsproc.prototype.getConfig = function(){
+tsproc.prototype.getConfig = function(callback){
 
-	return this._config;
+	if (callback){
+
+		callback(null, this.getConfig());
+	}
+	else
+		return this._config;
 }
 
 /**
@@ -399,7 +414,7 @@ tsproc.prototype.getNbTS = function(){
  */
 tsproc.prototype.getTSSize = function(ts_index){
 
-	if (ts_index)
+	if (typeof ts_index !== &#x27;undefined&#x27;)
 		return this._timeseries[ts_index].length;
 	else
 		return this._timeseries[0].length;
@@ -534,8 +549,9 @@ tsproc.prototype.getDocByTimestamp = function(ts_index, timestamp, callback){
 
 
 /**
- * Public method that returns an array of fields present 
- * in the specified timeseries (ie in each of it&#x27;s documents).
+ * Public method that returns an array of non-timestamp
+ *  fields present in the specified timeseries 
+ * (ie in each of it&#x27;s documents).
  *
  * @method getFields
  * @param {int} ts_index The index of timeseries
@@ -543,11 +559,17 @@ tsproc.prototype.getDocByTimestamp = function(ts_index, timestamp, callback){
  */
 tsproc.prototype.getFields = function(ts_index){
 
-	var fields = this._config[ts_index].fields;
-	var i,nb_fields = fields.length;
 	var fields_out = [];
 
-	for (i=0; i&lt;nb_fields; i++){
+	if (typeof ts_index === &#x27;undefined&#x27;)
+		ts_index = 0;
+
+	//get fields
+	var fields = this._config[ts_index].fields;
+	var nb_fields = fields.length;
+
+	//generate array
+	for (var i=0; i&lt;nb_fields; i++){
 		fields_out.push(fields[i].name);
 	}
 
@@ -775,7 +797,7 @@ tsproc.prototype.isISO = function(ts_index){
 	//it is not checking all the documents of the timeseries
 	var format;
 
-	if(ts_index !== undefined){
+	if (typeof ts_index !== &#x27;undefined&#x27;){
 
 		format = this.getTimestampFormat(ts_index);
 		return (format === ISO_FORMAT || format.toUpperCase() === String(&#x27;iso&#x27;).toUpperCase());
@@ -808,7 +830,7 @@ tsproc.prototype.isUNIX = function(ts_index){
 	//it is not checking all the documents of the timeseries
 	var format;
 
-	if(ts_index !== undefined){
+	if (typeof ts_index !== &#x27;undefined&#x27;){
 
 		format = this.getTimestampFormat(ts_index);
 		return (format.toUpperCase() === String(&#x27;unix&#x27;).toUpperCase());
@@ -824,6 +846,39 @@ tsproc.prototype.isUNIX = function(ts_index){
 
 		return true;
 	}
+}
+
+/**
+ * Public method that checks wheather one of the timeseries
+ * has a nominal field.
+ *
+ * @method isNominal
+ * @return {boolean} Wheather one of the timeseries has a nominal field
+ */
+tsproc.prototype.isNominal = function(){
+
+	var nb_fields, nb_ts = this.getNbTS();
+	var value, fields;
+
+	//for all the timeseries
+	for (var i=0; i&lt;nb_ts; i++){
+
+		//get the fields of the timeseries
+		fields = this.getFields(i);
+		
+		//check fields values
+		nb_fields = fields.length;
+		for (var j=0; j&lt;nb_fields; j++){
+
+			value = parseFloat(this.getDoc(i, 0)[fields[j]]);
+			if (isNaN(value) || typeof value !== &#x27;number&#x27;){
+
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 /**
@@ -864,7 +919,7 @@ tsproc.prototype.isUNIX = function(ts_index){
  */
 tsproc.prototype.toISO = function(callback){
 
-	if(!this.isISO()){
+	if (!this.isISO()){
 
 		var i,j,date;
 
@@ -1016,7 +1071,7 @@ tsproc.prototype.merge = function(callback){
 	}
 
 	//only if timeseries are homogeneous
-	if(this.isHomogeneous()){
+	if (this.isHomogeneous()){
 
 		//fusing fields document by document
 		var ts_size = this._timeseries[0].length;
@@ -1117,14 +1172,25 @@ tsproc.prototype.merge = function(callback){
 tsproc.prototype.undersample = function(type, skipsize, target_field, callback){
 
 	//neglect skipsize 0 and 1
-	if(skipsize &amp;&amp; skipsize &gt; 1){
+	if (skipsize &amp;&amp; skipsize &gt; 1){
 
 		//type is defined in ReduceEnum
-		if(!type) type = 0;
+		if (!type) type = ReduceEnum.skip;
+
+		//if there are some nominal fields
+		//and complexe reduction (not just skipping)
+		//is applied
+		if (this.isNominal() &amp;&amp; type !== ReduceEnum.skip){
+
+			if (callback)
+				callback(new Error(&#x27;Only the skip can be applied to the nominal timeseries&#x27;), this.getTS());
+
+			return;
+		}
 
 		//apply a reduce function
 		var reduced_timeseries = ReduceFunc[type].call(this, skipsize, target_field);
-		if(reduced_timeseries){
+		if (reduced_timeseries){
 
 			//recharge timeseries
 			this._timeseries = reduced_timeseries;
@@ -1215,6 +1281,15 @@ tsproc.prototype.interpolate = function(type, callback){
 
 	if (nb_ts &gt; 1){
 
+		//check if nominal
+		if (this.isNominal()){
+
+			if (callback)
+				callback(new Error(&#x27;Interpolation cannot be used for nominal timeseries&#x27;), this.getTS());
+
+			return;
+		}
+
 		var smooth_conf={};
 		var smoothers = new Array(nb_ts);
 
@@ -1243,7 +1318,7 @@ tsproc.prototype.interpolate = function(type, callback){
 			//learn the timeseries
 			smoothers[i] = new tsinterp(this._timeseries[i], smooth_conf, function(err){
 
-				if(err) {callback(err, null); i=nb_ts;}
+				if (err) {callback(err, null); i=nb_ts;}
 			});
 
 			//empty config
@@ -1493,6 +1568,84 @@ tsproc.prototype.checkSimilarity = function(callback){
 		callback(null, this.getTS());
 }
 
+tsproc.prototype.quantize = function(callback){
+
+	//only for merged timeseries
+	//with iso timestamps
+	if (this.getNbTS() === 1 &amp;&amp; this.isISO()){
+
+		//only for non-nominal timeseries
+		if (this.isNominal()){
+
+			if (callback)
+				callback(new Error(&#x27;Quantification cannot be applied to the nominal timeseries&#x27;), this.getTS());
+			return;
+		}
+
+		var doc,quantum;
+
+		//start with quantification of the non-timestamp fields
+		var fields = this.getFields();
+		var nb_fields = fields.length;
+		var nb_docs = this.getTSSize();
+		for (var i=0; i&lt;nb_fields; i++){
+
+			//go through all the documents
+			for (var j=0; j&lt;nb_docs; j++){
+
+				//get the quantum
+				quantum = getQuantum.call(this, 0, i);
+				if (quantum &gt; 0){
+
+					//get the document
+					doc = this.getDoc(i,j);
+
+					//quantize
+					doc[fields[i]] = Math.floor(doc[fields[i]]/quantum)*quantum; 
+				}
+			}
+		}
+
+		//quantize the timestamps
+		var ts_quantum = getTSQuantum.call(this);
+		var timestamp, year, month, day;
+		if (ts_quantum !== QuantTSEnum.none){
+
+			//go through all the documents
+			for (var j=0; j&lt;nb_docs; j++){
+
+				//get the timestamp
+				timestamp = this.getTimestamp(0, j); //timestamp is a moment.js date
+
+				//get the date
+				year = timestamp.year();
+				month = timestamp.month() + 1;
+				day = timestamp.date();
+
+				//filter
+				if (ts_quantum === QuantTSEnum.year){
+
+					month = 1;
+					day = 1;
+				}
+				if (ts_quantum === QuantTSEnum.month){
+
+					day = 1;
+				}
+
+				//create new timestamp
+				var new_timestamp = moment.utc(year + &#x27;-&#x27; + month + &#x27;-&#x27; + day, &#x27;YYYY-MM-DD&#x27;);
+
+				//set the new timestamp
+				this._timeseries[0][j][this.getTimestampField(0)] = new_timestamp.toISOString();
+			}
+		}
+	}
+
+	if (callback)
+		callback(null, this.getTS());
+}
+
 /**
  * Private method that merges the configuration of 
  * multiple timeseries into one.
@@ -1521,9 +1674,12 @@ function mergeConfigs(){
 		var fields = [];
 		for (var i=0; i&lt;config_size; i++){
 
-			this.getFields(i).forEach(function(field, index){
+			this._config[i].fields.forEach(function(field_conf, index){
 
-				fields.push({&#x27;name&#x27;: field});
+				fields.push({
+								&#x27;name&#x27;: field_conf.name,
+								&#x27;quantum&#x27;: field_conf.quantum
+							});
 			});
 		}
 		new_config[0].fields = fields;
@@ -2020,6 +2176,21 @@ function markCorrelation(borders, corr_value){
 				doc[field_name] = correlation;
 		}
 	}
+}
+
+function getQuantum(ts_index, field_index){
+
+	if (typeof field_index === &#x27;undefined&#x27;) field_index = 0;
+	if (typeof ts_index === &#x27;undefined&#x27;) ts_index = 0;
+
+	return this._config[ts_index].fields[field_index].quantum;
+}
+
+function getTSQuantum(ts_index){
+
+	if (typeof ts_index === &#x27;undefined&#x27;) ts_index = 0;
+
+	return this._config[ts_index].timestamp.quantum;
 }
 
 module.exports = tsproc;
