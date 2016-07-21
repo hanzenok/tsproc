@@ -142,6 +142,7 @@ var ReduceFunc = tsreductions;
  * - &lt;a href=&quot;#methods_checkSimilarity&quot;&gt;checkSimilarity()&lt;/a&gt;: similarity check between timeseries
  * - &lt;a href=&quot;#methods_toISO&quot;&gt;toISO()&lt;/a&gt;: passing the timestamp to the ISO format
  * - &lt;a href=&quot;#methods_undersample&quot;&gt;undersample()&lt;/a&gt;: timeseries size reduction
+ * - &lt;a href=&quot;#methods_quantize&quot;&gt;quantize()&lt;/a&gt;: values and timestamps quantification
  * - &lt;a href=&quot;#methods_process&quot;&gt;process()&lt;/a&gt;: a combination of all the previous methods
  *
  * All of the sited methods are changing the state of the timeseries 
@@ -1107,7 +1108,8 @@ tsproc.prototype.merge = function(callback){
 /**
  * Public method that reduces the number
  * of documents in the timeseries by different
- * methods. Applied only if the timeseries are homogeneous.
+ * methods. Applied only if the timeseries are homogeneous. And
+ * only if the field values are numeric (non-nominal).
  * Uses a &lt;b&gt;tsreductions&lt;/b&gt; module.
  *
  * The reduction mehtods are: 
@@ -1210,7 +1212,8 @@ tsproc.prototype.undersample = function(type, skipsize, target_field, callback){
  * Interpolation methods are: linear, cubic, lanczos, and neares neighbor.
  * Methods comparaison could be found &lt;a href=&quot;http://osuushi.github.io/plotdemo016.html&quot;&gt;here&lt;/a&gt;.
  *
- * Timestamps should be the ISO strings.
+ * Timestamps should be the ISO strings and field values
+ * should be numeric (non-nominal).
  * Uses a &lt;b&gt;tsinterp&lt;/b&gt; module.
  *
  * @method interpolate
@@ -1359,7 +1362,8 @@ tsproc.prototype.interpolate = function(type, callback){
  * to simplify them and leave only the documents that have the same
  * timestamps in different timeseries (cf example).
  *
- * Timestamps should be the ISO strings.
+ * Timestamps should be the ISO strings and field values
+ * should be numeric (non-nominal).
  *
  * @method intersect
  * @param {function} callback A callback function
@@ -1401,6 +1405,15 @@ tsproc.prototype.intersect = function(callback){
 	var nb_ts = this.getNbTS();
 
 	if (nb_ts &gt; 1){
+
+		//check if nominal
+		if (this.isNominal()){
+
+			if (callback)
+				callback(new Error(&#x27;Intersection cannot be used for nominal timeseries&#x27;), this.getTS());
+
+			return;
+		}
 
 		//check date formats
 		if (!this.isISO()){
@@ -1447,6 +1460,7 @@ tsproc.prototype.intersect = function(callback){
  *
  * Timeseries should be merged (ie the function works only with 
  * a single timeseries) and have at least two non-timestamp fields.
+ * The timeseries values should be non-nominal.
  * 
  * The similarity is indicated by adding a new field &#x27;correlation&#x27; to each document.
  * If value of this field is not &#x27;false&#x27;, it means that a document is a part 
@@ -1496,7 +1510,7 @@ tsproc.prototype.checkSimilarity = function(callback){
 	//working only if correlation detection is demanded
 	//and only with a merged timeseries 
 	//with more than one non timestamp fields
-	if (this._correlation_activated &amp;&amp; this.getNbTS() === 1 &amp;&amp; this.getFields(0).length &gt; 1){
+	if (this._correlation_activated &amp;&amp; this.getNbTS() === 1 &amp;&amp; this.getFields().length &gt; 1 &amp;&amp; !this.isNominal()){
 
 		var ts_size = this.getTSSize();
 		var values, coef, max;
@@ -1568,6 +1582,83 @@ tsproc.prototype.checkSimilarity = function(callback){
 		callback(null, this.getTS());
 }
 
+/**
+ * @description
+ * Public method that is aplying the 
+ * quantification to all the values 
+ * of the timeseries (timestamps and normal).
+ *
+ * Timeseries should be merged (ie the function works only with a single timeseries),
+ * timestamps should have an ISO format.
+ * Also, the method should be used only by timeseries with numeric fields (non-nominal).
+ * 
+ * @method quantize
+ * @param {function} callback A callback function
+ *
+ * @example
+ *     var tsproc = require(&#x27;tsproc&#x27;);
+ *
+ *     var config = {
+ *     		&quot;transform&quot;:{&quot;type&quot;:&quot;interp&quot;,&quot;interp_type&quot;:&quot;linear&quot;},
+ *
+ *     		&quot;reduction&quot;:{&quot;type&quot;:&quot;skip&quot;,&quot;size&quot;:1,&quot;target_field&quot;:&quot;&quot;},
+ *
+ *     		&quot;date_borders&quot;:{&quot;from&quot;:{&quot;date&quot;:&quot;&quot;},&quot;to&quot;:{&quot;date&quot;:&quot;&quot;}},
+ *
+ *     		&quot;correlation&quot;:{&quot;count_negative&quot;:false,&quot;max_coef&quot;:true},
+ *
+ *     		&quot;timeseries&quot;:
+ * 	    		[
+ * 					{
+ * 					&quot;fields&quot;:
+ * 						[
+ * 							{&quot;name&quot;:&quot;a&quot;, &quot;quantum&quot;: 2}	//new field
+ * 						],
+ *
+ * 					&quot;timestamp&quot;:{&quot;name&quot;:&quot;year&quot;,&quot;format&quot;:&quot;YYYY-MM&quot;, &quot;quantum&quot;: &quot;year&quot;}
+ * 					},
+ *
+ * 					{
+ * 					&quot;fields&quot;:
+ * 						[
+ * 							{&quot;name&quot;:&quot;b&quot;, &quot;quantum&quot;: 2}	//new field
+ * 						],	
+ *
+ * 					&quot;timestamp&quot;:{&quot;name&quot;:&quot;year&quot;,&quot;format&quot;:&quot;YYYY-MM&quot;, &quot;quantum&quot;: &quot;year&quot;}
+ * 					}
+ * 				]
+ * 		};
+ * 
+ *     var ts = [
+ *     		[{a: 21.07, year:&#x27;2012-01&#x27;}, {a: 23.23, year:&#x27;2012-02&#x27;}, {a: 0.24, year:&#x27;2012-03&#x27;}, {a: 25.25, year:&#x27;2013-01&#x27;}, {a: 25.25, year:&#x27;2013-02&#x27;}, {a: 25.25, year:&#x27;2013-03&#x27;}],
+ *    		    [{b: 21.42, year:&#x27;2012-01&#x27;}, {b: 23.11, year:&#x27;2012-02&#x27;}, {b: 0.11, year:&#x27;2012-03&#x27;}, {b: 21.01, year:&#x27;2013-01&#x27;}, {b: 4.5, year:&#x27;2013-02&#x27;}, {b: 35.2, year:&#x27;2013-03&#x27;}]
+ *          ];
+ *     
+ *     var tsp = new tsproc(ts, config, null);
+ *
+ *     //we can just merge (without interpolation) the timeseries
+ *     //because they are homogeneous
+ *     tsp.merge(null);
+ *     tsp.toISO(null);
+ *
+ *     //launch the quantification
+ *     tsp.quantize(function(err, timeseries){
+ *	
+ *	   		if (timeseries) console.log(timeseries);
+ *     		//the result is:
+ *     		//[
+ *     		//	{a: 20, b: 20, time: &#x27;2012-01-01T00:00:00.000Z&#x27;},
+ *     		//	{a: 22, b: 22, time: &#x27;2012-01-01T00:00:00.000Z&#x27;},
+ *     		//	{a: 0, b: 0, time: &#x27;2012-01-01T00:00:00.000Z&#x27;},
+ *     		//	{a: 24, b: 20, time: &#x27;2013-01-01T00:00:00.000Z&#x27;},
+ *     		//	{a: 24, b: 4, time: &#x27;2013-01-01T00:00:00.000Z&#x27;},
+ *     		//	{a: 24, b: 34, time: &#x27;2013-01-01T00:00:00.000Z&#x27;} 
+ *     		//]
+ *     		//
+ *     		// we can conclude that values were rounded to 2, and dates to the year
+ *     });
+ *
+ */
 tsproc.prototype.quantize = function(callback){
 
 	//only for merged timeseries
@@ -1598,7 +1689,7 @@ tsproc.prototype.quantize = function(callback){
 				if (quantum &gt; 0){
 
 					//get the document
-					doc = this.getDoc(i,j);
+					doc = this.getDoc(0,j);
 
 					//quantize
 					doc[fields[i]] = Math.floor(doc[fields[i]]/quantum)*quantum; 
@@ -2183,14 +2274,23 @@ function getQuantum(ts_index, field_index){
 	if (typeof field_index === &#x27;undefined&#x27;) field_index = 0;
 	if (typeof ts_index === &#x27;undefined&#x27;) ts_index = 0;
 
-	return this._config[ts_index].fields[field_index].quantum;
+	//if quantum field is specified
+	if (this._config[ts_index].fields[field_index].quantum)
+		return this._config[ts_index].fields[field_index].quantum;
+	else
+		return 0;
+
 }
 
 function getTSQuantum(ts_index){
 
 	if (typeof ts_index === &#x27;undefined&#x27;) ts_index = 0;
 
-	return this._config[ts_index].timestamp.quantum;
+	//if quantum field is specified
+	if (this._config[ts_index].timestamp.quantum)
+		return this._config[ts_index].timestamp.quantum;
+	else
+		return QuantTSEnum.none;
 }
 
 module.exports = tsproc;
