@@ -117,6 +117,12 @@ var InterpEnum = {&#x27;linear&#x27;: 0, &#x27;cubic&#x27;: 1, &#x27;lanczos&#x2
  */
 var ReduceEnum = {&#x27;skip&#x27;: 0, &#x27;sum&#x27;: 1, &#x27;avg&#x27;: 2, &#x27;max&#x27;: 3, &#x27;min&#x27;: 4};
 
+/**
+ * @property QuantTSEnum
+ * @type json
+ * @description A description of types
+ * of the timestamp quantification.
+ */
 var QuantTSEnum = {none: &#x27;none&#x27;, day: &#x27;day&#x27;, month: &#x27;month&#x27;, year: &#x27;year&#x27;};
 
 /**
@@ -1459,7 +1465,7 @@ tsproc.prototype.intersect = function(callback){
  * the local correlation.
  *
  * Timeseries should be merged (ie the function works only with 
- * a single timeseries) and have at least two non-timestamp fields.
+ * a single timeseries) and have two non-timestamp fields.
  * The timeseries values should be non-nominal.
  * 
  * The similarity is indicated by adding a new field &#x27;correlation&#x27; to each document.
@@ -1509,8 +1515,8 @@ tsproc.prototype.checkSimilarity = function(callback){
 
 	//working only if correlation detection is demanded
 	//and only with a merged timeseries 
-	//with more than one non timestamp fields
-	if (this._correlation_activated &amp;&amp; this.getNbTS() === 1 &amp;&amp; this.getFields().length &gt; 1 &amp;&amp; !this.isNominal()){
+	//with 2 timestamp fields
+	if (this._correlation_activated &amp;&amp; this.getNbTS() === 1 &amp;&amp; this.getFields().length === 2 &amp;&amp; !this.isNominal()){
 
 		var ts_size = this.getTSSize();
 		var values, coef, max;
