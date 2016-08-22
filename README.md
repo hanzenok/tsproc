@@ -6,6 +6,7 @@ tsproc is a Node.js based data exploration tool that works with multiple timeser
 - interpolation
 - undersampling
 - correlation detection
+- values and timestamp quantification
 - passing the timestamps into ISO format
 
 ## Use cases
