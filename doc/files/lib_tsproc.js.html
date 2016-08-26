@@ -856,6 +856,29 @@ tsproc.prototype.isUNIX = function(ts_index){
 }
 
 /**
+* Public method that attribute &lt;code&gt;field&lt;/code&gt;
+* of the timeseries at &lt;code&gt;ts_index&lt;/code&gt; is 
+* nominal (not numeric) or not.
+* @method isFieldNominal
+* @param ts_index {integer} Index of a timeseries to check
+* @param field {string} A field to check
+* @return {boolean} True if the field is nominal, false if not
+*/
+tsproc.prototype.isFieldNominal = function(ts_index, field){
+
+	if (typeof ts_index !== &#x27;undefined&#x27; &amp;&amp; typeof field !== &#x27;undefined&#x27;){
+
+		//get the the value of a field
+		var doc = this.getDoc(ts_index, 0);
+		if (doc[field]){
+
+			var value = parseFloat(doc[field]);
+			return isNaN(value) || typeof value !== &#x27;number&#x27;;
+		}
+	}
+}
+
+/**
  * Public method that checks wheather one of the timeseries
  * has a nominal field.
  *
@@ -865,7 +888,7 @@ tsproc.prototype.isUNIX = function(ts_index){
 tsproc.prototype.isNominal = function(){
 
 	var nb_fields, nb_ts = this.getNbTS();
-	var value, fields;
+	var fields;
 
 	//for all the timeseries
 	for (var i=0; i&lt;nb_ts; i++){
@@ -877,8 +900,8 @@ tsproc.prototype.isNominal = function(){
 		nb_fields = fields.length;
 		for (var j=0; j&lt;nb_fields; j++){
 
-			value = parseFloat(this.getDoc(i, 0)[fields[j]]);
-			if (isNaN(value) || typeof value !== &#x27;number&#x27;){
+			// value = parseFloat(this.getDoc(i, 0)[fields[j]]);
+			if (this.isFieldNominal(i, fields[j])){
 
 				return true;
 			}
@@ -1368,8 +1391,7 @@ tsproc.prototype.interpolate = function(type, callback){
  * to simplify them and leave only the documents that have the same
  * timestamps in different timeseries (cf example).
  *
- * Timestamps should be the ISO strings and field values
- * should be numeric (non-nominal).
+ * Timestamps should be the ISO strings.
  *
  * @method intersect
  * @param {function} callback A callback function
@@ -1411,15 +1433,6 @@ tsproc.prototype.intersect = function(callback){
 	var nb_ts = this.getNbTS();
 
 	if (nb_ts &gt; 1){
-
-		//check if nominal
-		if (this.isNominal()){
-
-			if (callback)
-				callback(new Error(&#x27;Intersection cannot be used for nominal timeseries&#x27;), this.getTS());
-
-			return;
-		}
 
 		//check date formats
 		if (!this.isISO()){
@@ -1516,7 +1529,16 @@ tsproc.prototype.checkSimilarity = function(callback){
 	//working only if correlation detection is demanded
 	//and only with a merged timeseries 
 	//with 2 timestamp fields
-	if (this._correlation_activated &amp;&amp; this.getNbTS() === 1 &amp;&amp; this.getFields().length === 2 &amp;&amp; !this.isNominal()){
+	if (this._correlation_activated &amp;&amp; this.getNbTS() === 1 &amp;&amp; this.getFields().length === 2){
+
+		//check if nominal
+		if (this.isNominal()){
+
+			if (callback)
+				callback(new Error(&#x27;Similarity cannot be checked for nominal attributes&#x27;), this.getTS());
+
+			return;
+		}
 
 		var ts_size = this.getTSSize();
 		var values, coef, max;
@@ -1596,7 +1618,7 @@ tsproc.prototype.checkSimilarity = function(callback){
  *
  * Timeseries should be merged (ie the function works only with a single timeseries),
  * timestamps should have an ISO format.
- * Also, the method should be used only by timeseries with numeric fields (non-nominal).
+ * The non-numeric (nominal) fields are ignored.
  * 
  * @method quantize
  * @param {function} callback A callback function
@@ -1671,14 +1693,6 @@ tsproc.prototype.quantize = function(callback){
 	//with iso timestamps
 	if (this.getNbTS() === 1 &amp;&amp; this.isISO()){
 
-		//only for non-nominal timeseries
-		if (this.isNominal()){
-
-			if (callback)
-				callback(new Error(&#x27;Quantification cannot be applied to the nominal timeseries&#x27;), this.getTS());
-			return;
-		}
-
 		var doc,quantum;
 
 		//start with quantification of the non-timestamp fields
@@ -1687,12 +1701,12 @@ tsproc.prototype.quantize = function(callback){
 		var nb_docs = this.getTSSize();
 		for (var i=0; i&lt;nb_fields; i++){
 
-			//go through all the documents
-			for (var j=0; j&lt;nb_docs; j++){
+			//get the quantum
+			quantum = getQuantum.call(this, 0, i);
+			if (quantum &gt; 0 &amp;&amp; !this.isFieldNominal(0, fields[i])){
 
-				//get the quantum
-				quantum = getQuantum.call(this, 0, i);
-				if (quantum &gt; 0){
+				//go through all the documents
+				for (var j=0; j&lt;nb_docs; j++){
 
 					//get the document
 					doc = this.getDoc(0,j);
@@ -2275,6 +2289,19 @@ function markCorrelation(borders, corr_value){
 	}
 }
 
+/**
+ * Private method that returns
+ * the size of a quantum by wich
+ * the field should be quantized.
+ * The quantum value is read from
+ * the config JSON.
+ *
+ * @method getQuantum
+ * @private
+ * @param {integer} ts_index Index of the timeseries where the field is
+ * @param {interger} field_index Index of the field to get the quantum
+ * @return A quantum of a field 
+ */
 function getQuantum(ts_index, field_index){
 
 	if (typeof field_index === &#x27;undefined&#x27;) field_index = 0;
@@ -2288,6 +2315,26 @@ function getQuantum(ts_index, field_index){
 
 }
 
+/**
+ * Private method that returns
+ * the size of a quantum by wich
+ * the timestamp field should be quantized.
+ * The quantum value is read from
+ * the config JSON.
+ * &lt;br/&gt;
+ * For the timestamp fields, 
+ * the possible values are:
+ * - &#x27;none&#x27;
+ * - &#x27;day&#x27;
+ * - &#x27;month&#x27;
+ * - &#x27;year&#x27;
+ *
+ * @method getTSQuantum
+ * @private
+ * @param {integer} ts_index Index of the timeseries where the timestamp field is
+ * @param {interger} field_index Index of the timestamp field to get the quantum
+ * @return A quantum of a timestamp field 
+ */
 function getTSQuantum(ts_index){
 
 	if (typeof ts_index === &#x27;undefined&#x27;) ts_index = 0;

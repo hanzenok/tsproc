@@ -1,6 +1,6 @@
 # tsproc
 
-tsproc is a Node.js based data exploration tool that works with multiple timeseries and offers different possibilities to work with it:
+tsproc (Time Series Processor) is a Node.js based data exploration tool that works with multiple timeseries and offers different possibilities to work with it:
 - cutting
 - merging
 - interpolation
