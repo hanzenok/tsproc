@@ -266,9 +266,10 @@ function tsproc(timeseries, config, err_callback){
  * - if the borders (min and max dates) are specified in the config file, the timeseries would be cut
  * - all the dates would be transformed to the ISO string
  * - if there are multiple timeseries, and they are not homogeneous, all the timeseries would be interpolated or intersected (cf &lt;a href=&quot;#methods_intersect&quot;&gt;intersect()&lt;/a&gt; function)
- * - if the are multiple timeseries (and after the previous step they are all homogeneous), they would be fused into one timeseries document by document
+ * - if the are multiple timeseries (and after the previous step they are all homogeneous), they would be merged into one timeseries document by document
  * - the output timeseries&#x27;s timestamp field would be called &#x27;time&#x27; and it would be an ISO string
- * - finally, if the skip value is defined, the timeseries would be undersampled to decrease it&#x27;s size 
+ * - if the skip value is defined in the JSON config, the timeseries would be undersampled to decrease it&#x27;s size
+ * - finally, if the quantification is demanded (in the JSON config), the values of the timeseries (timestamps and normal) would be quantified
  * 
  * @method process
  * @param {function} callback A callback function
@@ -380,9 +381,10 @@ tsproc.prototype.getTS = function(callback){
 
 /**
  * Public method that returns (directly or via &lt;code&gt;callback&lt;/code&gt;) 
- * a timeseries config json.
- * Note: for now, it returns only the timeseries config
- * of the tsproc (not the options like transform type,
+ * a timeseries config JSON.
+ *
+ * &lt;i&gt;Note&lt;/i&gt;: for now, it returns only the timeseries config
+ * of the &lt;code&gt;tsproc&lt;/code&gt; (not the options like transform type,
  * data borders, correlaiton, etc).
  *
  * @method getConfig
@@ -401,7 +403,7 @@ tsproc.prototype.getConfig = function(callback){
 
 /**
  * Public method that returns the current number of timeseries in 
- * the tsproc module.
+ * the &lt;code&gt;tsproc&lt;/code&gt; module.
  *
  * @method getNbTS
  * @return {int} Number of timeseries available
@@ -791,7 +793,7 @@ tsproc.prototype.renameField = function(ts_index, field_name, new_name, callback
 
 /**
  * Public method that checks wheather the timestamps have ISO format.
- * The method checks only the format written in config json, it does not verify the timestamps
+ * The method checks only the format written in config JSON, it does not verify the timestamps
  * of all the documents.
  *
  * @method isISO
@@ -824,7 +826,7 @@ tsproc.prototype.isISO = function(ts_index){
 
 /**
  * Public method that checks wheather the timestamps have UNIX format.
- * The method checks only the format written in config json, it does not verify the timestamps
+ * The method checks only the format written in config JSON, it does not verify the timestamps
  * of all the documents.
  *
  * @method isUNIX
@@ -1057,7 +1059,7 @@ tsproc.prototype.cut = function(date_borders, callback){
  * into one timeseries. The timeseries should be homogeneous.
  *
  * The result timeseries would have only one timestamp field
- * (it&#x27;s name is specified by TIMESTAMP_FIELD proprety).
+ * (it&#x27;s name is specified by &lt;code&gt;TIMESTAMP_FIELD&lt;/code&gt; proprety).
  *
  * @method merge
  * @param {function} callback A callback function
@@ -1243,7 +1245,7 @@ tsproc.prototype.undersample = function(type, skipsize, target_field, callback){
  *
  * Timestamps should be the ISO strings and field values
  * should be numeric (non-nominal).
- * Uses a &lt;b&gt;tsinterp&lt;/b&gt; module.
+ * Uses a &lt;code&gt;tsinterp&lt;/code&gt; module.
  *
  * @method interpolate
  * @param {int} type An index of InterpEnum with interpolation methods
@@ -1643,7 +1645,7 @@ tsproc.prototype.checkSimilarity = function(callback){
  * 							{&quot;name&quot;:&quot;a&quot;, &quot;quantum&quot;: 2}	//new field
  * 						],
  *
- * 					&quot;timestamp&quot;:{&quot;name&quot;:&quot;year&quot;,&quot;format&quot;:&quot;YYYY-MM&quot;, &quot;quantum&quot;: &quot;year&quot;}
+ * 					&quot;timestamp&quot;:{&quot;name&quot;:&quot;year&quot;,&quot;format&quot;:&quot;YYYY-MM&quot;, &quot;quantum&quot;: &quot;year&quot;}	//new field
  * 					},
  *
  * 					{
@@ -1652,7 +1654,7 @@ tsproc.prototype.checkSimilarity = function(callback){
  * 							{&quot;name&quot;:&quot;b&quot;, &quot;quantum&quot;: 2}	//new field
  * 						],	
  *
- * 					&quot;timestamp&quot;:{&quot;name&quot;:&quot;year&quot;,&quot;format&quot;:&quot;YYYY-MM&quot;, &quot;quantum&quot;: &quot;year&quot;}
+ * 					&quot;timestamp&quot;:{&quot;name&quot;:&quot;year&quot;,&quot;format&quot;:&quot;YYYY-MM&quot;, &quot;quantum&quot;: &quot;year&quot;}	//new field
  * 					}
  * 				]
  * 		};
@@ -1761,7 +1763,7 @@ tsproc.prototype.quantize = function(callback){
  * Private method that merges the configuration of 
  * multiple timeseries into one.
  * The final timestamp name is defined by the 
- * TIMESTAMP_FIELD proprety.
+ * &lt;code&gt;TIMESTAMP_FIELD&lt;/code&gt; proprety.
  *
  * @method mergeConfigs
  * @private
